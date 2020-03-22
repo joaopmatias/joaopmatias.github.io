@@ -2,7 +2,7 @@
 layout: page
 title: blog
 ---
-<p>Coming soon!</p>
+
 {%- if site.posts.size > 0 -%}
 <ul class="post-list">
   {%- for post in site.posts -%}
