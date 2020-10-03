@@ -17,7 +17,7 @@ Let us start by the mediaplayer.
 
 This is an extremely popular mediaplayer and it is no surprise that it is capable of playing video directly from Youtube or Twitch (the latter has a caveat, more on that later). For a better experience, I prefer to have a window just for the video and without any control buttons, which can be achieved by unchecking *Video decorations* in *Preferences > Video*. Beware that version 3.0.9 showed problems resizing the window when this option was unchecked. 
 
-![VLC Preferences](images/video_decorations.png)
+![VLC Preferences](https://joaopmatias.github.io/assets/images/blog/video_decorations.png)
 
 I also like adding the option *Video > Float on Top* and the controls *View > Show Previous & Next Buttons* and *View > Show Shuffle & Repeat Buttons*.
 
