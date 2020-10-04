@@ -1,0 +1,26 @@
+
+baseURL: "http://example.org/"
+languageCode: "en-us"
+title: "My New Hugo Site"
+theme: "hugo-PaperMod"
+layout: "archives"
+
+params:
+    defaultTheme: dark
+
+    profileMode:
+        enabled: true
+        title: "<Title>" # optional default will be site title
+        imageUrl: "<image link>" # optional
+        imageTitle: "<title of image as alt>" # optional
+        buttons:
+            - name: Archive
+              url: "/archive"
+            - name: Github
+              url: "https://github.com/"
+
+    socialIcons: # optional
+        - name: github
+          url: 'https://joaopmatias.github.io'
+        - name: linkedin
+          url: "<link2>"
