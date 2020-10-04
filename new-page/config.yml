@@ -22,5 +22,10 @@ params:
     socialIcons: # optional
         - name: github
           url: 'https://joaopmatias.github.io'
+        - name: stackoverflow
+          url: 'https://stackoverflow.com/users/11454106/jo%c3%a3o-matias'
         - name: linkedin
-          url: "<link2>"
+          url: 'https://www.linkedin.com/in/joaopcmatias'
+        - name: CV
+          url: 'content/CV/CV_JMatias.pdf'
+
