@@ -4,17 +4,16 @@ languageCode: "en-us"
 title: "João Matias"
 theme: "hugo-PaperMod"
 
-
-
-layout: "archives"
+enableInlineShortcodes: true
 
 params:
+    description: 'Data scientist and mathematician'
     defaultTheme: dark
     ShowReadingTime: true
     ShowShareButtons: true
 
     homeInfoParams:
-        enabled: true
+        enabled: false
         title: "Hi there \U0001F44B"
         content: Welcome to my blog
 
@@ -41,11 +40,11 @@ params:
 
 menu:
     main:
-        - name: Archives
-          url: /archives/
-          weight: 5
         - name: Posts
           url: /posts/
+          weight: 5
+        - name: Archives
+          url: /archives/
           weight: 10
         - name: Tags
           url: /tags/

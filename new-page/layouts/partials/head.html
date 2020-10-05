@@ -38,8 +38,8 @@
     as="style">
 {{- end -}}
 <!-- Favicons -->
-<link rel="apple-touch-icon" href="{{ "emacs-icon-128x128.png" | absURL }}">
-<link rel="icon" href="{{ .Site.Params.assets.favicon | default "Papirus-Team-Papirus-Apps-Emacs.ico" | absURL }}">
+<!-- from hermit theme favicons.html -->
+{{- partial "favicons.html" }}
 <!-- Generator -->
 {{- hugo.Generator }}
 <!-- RSS -->
