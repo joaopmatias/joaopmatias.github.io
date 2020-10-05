@@ -8,7 +8,7 @@ enableInlineShortcodes: true
 
 params:
     description: 'Data scientist and mathematician'
-    defaultTheme: dark
+    defaultTheme: auto
     ShowReadingTime: true
     ShowShareButtons: true
 
