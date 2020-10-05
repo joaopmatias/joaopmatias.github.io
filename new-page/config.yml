@@ -1,0 +1,61 @@
+
+baseURL: "https://joaopmatias.github.io"
+languageCode: "en-us"
+title: "João Matias"
+theme: "hugo-PaperMod"
+
+enableInlineShortcodes: true
+
+params:
+    description: 'Data scientist and mathematician'
+    defaultTheme: dark
+    ShowReadingTime: true
+    ShowShareButtons: true
+
+    homeInfoParams:
+        enabled: false
+        title: "Hi there \U0001F44B"
+        content: Welcome to my blog
+
+    profileMode:
+        enabled: true
+        title: "João Matias" # optional default will be site title
+        imageUrl: "images/photo_front.jpg" # optional
+        subtitle: Data Scientist and mathematician
+        imageTitle: "Data scientist" # optional
+
+    socialIcons: # optional
+        - name: github
+          url: 'https://joaopmatias.github.io'
+        - name: twitter
+          url: 'https://twitter.com/JwowMatias'
+        - name: stackoverflow
+          url: 'https://stackoverflow.com/users/11454106/jo%c3%a3o-matias'
+        - name: linkedin
+          url: 'https://www.linkedin.com/in/joaopcmatias'
+        - name: fontawesome-medium-4
+          url: 'https://medium.com/@joaopmatias'
+        - name: CV
+          url: 'CV/CV_JMatias.pdf'
+
+menu:
+    main:
+        - name: Posts
+          url: /posts/
+          weight: 5
+        - name: Archives
+          url: /archives/
+          weight: 10
+        - name: Tags
+          url: /tags/
+          weight: 15
+        - name: Series
+          url: /series/
+          weight: 20
+        - name: About
+          url: /about/
+
+taxonomies:
+    category: categories
+    tag: tags
+    series: series
