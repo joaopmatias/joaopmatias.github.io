@@ -1,31 +1,62 @@
 
-baseURL: "http://example.org/"
+baseURL: "https://joaopmatias.github.io"
 languageCode: "en-us"
-title: "My New Hugo Site"
+title: "João Matias"
 theme: "hugo-PaperMod"
+
+
+
 layout: "archives"
 
 params:
     defaultTheme: dark
+    ShowReadingTime: true
+    ShowShareButtons: true
+
+    homeInfoParams:
+        enabled: true
+        title: "Hi there \U0001F44B"
+        content: Welcome to my blog
 
     profileMode:
         enabled: true
-        title: "<Title>" # optional default will be site title
-        imageUrl: "<image link>" # optional
-        imageTitle: "<title of image as alt>" # optional
-        buttons:
-            - name: Archive
-              url: "/archive"
-            - name: Github
-              url: "https://github.com/"
+        title: "João Matias" # optional default will be site title
+        imageUrl: "images/photo_front.jpg" # optional
+        subtitle: Data Scientist and mathematician
+        imageTitle: "Data scientist" # optional
 
     socialIcons: # optional
         - name: github
           url: 'https://joaopmatias.github.io'
+        - name: twitter
+          url: 'https://twitter.com/JwowMatias'
         - name: stackoverflow
           url: 'https://stackoverflow.com/users/11454106/jo%c3%a3o-matias'
         - name: linkedin
           url: 'https://www.linkedin.com/in/joaopcmatias'
+        - name: fontawesome-medium-4
+          url: 'https://medium.com/@joaopmatias'
         - name: CV
-          url: 'content/CV/CV_JMatias.pdf'
+          url: 'CV/CV_JMatias.pdf'
 
+menu:
+    main:
+        - name: Archives
+          url: /archives/
+          weight: 5
+        - name: Posts
+          url: /posts/
+          weight: 10
+        - name: Tags
+          url: /tags/
+          weight: 15
+        - name: Series
+          url: /series/
+          weight: 20
+        - name: About
+          url: /about/
+
+taxonomies:
+    category: categories
+    tag: tags
+    series: series
