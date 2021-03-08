@@ -6,7 +6,17 @@
     <description>Recent content in Posts on João Matias</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 06 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://joaopmatias.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 08 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://joaopmatias.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Debugging an issue related with Java and Python interoperability</title>
+      <link>https://joaopmatias.github.io/posts/2021-03-06-debug-jep/</link>
+      <pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://joaopmatias.github.io/posts/2021-03-06-debug-jep/</guid>
+      <description>I have been using JEP (Java Embeded Python) to allow calling the code written, in Python, by a team of data scientists in some Java microservices for quite a while now. In general, this solution has been very stable and fast.
+However, a while back and after some specific changes in the Python code, we started seeing some segfaults occurring when the code, that would run smoothly in Python, was executed through JEP.</description>
+    </item>
+    
     <item>
       <title>Tuning the zsh shell using zinit and powerlevel10k</title>
       <link>https://joaopmatias.github.io/posts/2021-02-06-zsh_part_1/</link>
