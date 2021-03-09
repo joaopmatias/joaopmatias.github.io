@@ -13,7 +13,7 @@
       <pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate>
       
       <guid>https://joaopmatias.github.io/posts/2021-03-06-debug-jep/</guid>
-      <description>I have been using JEP (Java Embeded Python) to allow calling the code written, in Python, by a team of data scientists in some Java microservices for quite a while now. In general, this solution has been very stable and fast.
+      <description>I have been using JEP (Java Embedded Python) to allow calling the code written, in Python, by a team of data scientists in some Java micro-services for quite a while now. In general, this solution has been very stable and fast.
 However, a while back and after some specific changes in the Python code, we started seeing some segfaults occurring when the code, that would run smoothly in Python, was executed through JEP.</description>
     </item>
     
