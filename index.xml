@@ -6,7 +6,17 @@
     <description>Recent content on João Matias</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 08 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://joaopmatias.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 28 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://joaopmatias.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A Pandas read_csv crash course</title>
+      <link>https://joaopmatias.github.io/posts/2021-03-28-pandas-read-csv/</link>
+      <pubDate>Sun, 28 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://joaopmatias.github.io/posts/2021-03-28-pandas-read-csv/</guid>
+      <description>Pandas is the most popular Python Library to analyze tabular data and, when it comes to loading data, the function read_csv is very convenient. Upon opening its documentation one may be startled by the long list of arguments and options, but these allow the user to load tabular data in many different formats.
+For that reason, reading a simple CSV file in Pandas can become a bit complex. In order to become better acquainted with the parameters in read_csv I&amp;rsquo;ll share a few examples using it.</description>
+    </item>
+    
     <item>
       <title>Debugging an issue related with Java and Python interoperability</title>
       <link>https://joaopmatias.github.io/posts/2021-03-06-debug-jep/</link>
