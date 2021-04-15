@@ -8,11 +8,6 @@
   </url>
   
   <url>
-    <loc>https://joaopmatias.github.io/</loc>
-    <lastmod>2021-03-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://joaopmatias.github.io/posts/</loc>
     <lastmod>2021-03-28T00:00:00+00:00</lastmod>
   </url>
@@ -29,6 +24,11 @@
   
   <url>
     <loc>https://joaopmatias.github.io/about/</loc>
+    <lastmod>2020-10-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://joaopmatias.github.io/</loc>
     <lastmod>2020-10-04T00:00:00+00:00</lastmod>
   </url>
   
