@@ -6,10 +6,17 @@
     <description>Recent content on João Matias</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 04 Oct 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://joaopmatias.github.io/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Sun, 16 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://joaopmatias.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Is Numpy really faster? - A second look</title>
+      <link>https://joaopmatias.github.io/posts/2021-05-16-is-numpy-fast/</link>
+      <pubDate>Sun, 16 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://joaopmatias.github.io/posts/2021-05-16-is-numpy-fast/</guid>
+      <description>I recently came accross an interesting blog post by Bjorn Madsen, Is Numpy really faster.
+It is a short post displaying one example where a python snippet using Numpy is much slower than the version written in pure Python due to some overheads associated to Numpy.
+Building upon that example, I spent some time writing a function using Numpy that performs similar operations even faster than the pure Python version shown by Bjorn.</description>
+    </item>
     
     <item>
       <title>A Pandas read_csv crash course</title>

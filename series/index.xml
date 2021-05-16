@@ -5,10 +5,6 @@
     <link>https://joaopmatias.github.io/series/</link>
     <description>Recent content in Series on João Matias</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    
-	<atom:link href="https://joaopmatias.github.io/series/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <language>en-us</language><atom:link href="https://joaopmatias.github.io/series/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
