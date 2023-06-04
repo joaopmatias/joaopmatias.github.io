@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on João Matias</title>
-    <link>https://joaopmatias.github.io/posts/</link>
+    <link>https://joaomatias.ml/posts/</link>
     <description>Recent content in Posts on João Matias</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 02 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://joaopmatias.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 02 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://joaomatias.ml/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Quick Setup for Git Credentials and Signed Commits</title>
-      <link>https://joaopmatias.github.io/posts/2023-06-02-git-sign/</link>
+      <link>https://joaomatias.ml/posts/2023-06-02-git-sign/</link>
       <pubDate>Fri, 02 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://joaopmatias.github.io/posts/2023-06-02-git-sign/</guid>
+      <guid>https://joaomatias.ml/posts/2023-06-02-git-sign/</guid>
       <description>Nowadays, Git is an essential tool in software development. It allows developers to easily trace the history of all changes throughout the life of a code base with multiple contributors, and makes the development process a lot smoother.
 It also has many options that add both convenience and safety to the development process.
 However, it is often the case that developers struggle a bit seting up all git options they want on a new machine resulting in a series of google searches for the pages visited in the last time they were in the same situation.</description>
@@ -20,10 +20,10 @@ However, it is often the case that developers struggle a bit seting up all git o
     
     <item>
       <title>Is Numpy really faster? - A second look</title>
-      <link>https://joaopmatias.github.io/posts/2021-05-16-is-numpy-fast/</link>
+      <link>https://joaomatias.ml/posts/2021-05-16-is-numpy-fast/</link>
       <pubDate>Sun, 16 May 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://joaopmatias.github.io/posts/2021-05-16-is-numpy-fast/</guid>
+      <guid>https://joaomatias.ml/posts/2021-05-16-is-numpy-fast/</guid>
       <description>I recently came accross an interesting blog post by Bjorn Madsen, Is Numpy really faster.
 It is a short post displaying one example where a python snippet using Numpy is much slower than the version written in pure Python due to some overheads associated to Numpy.
 Building upon that example, I spent some time writing a function using Numpy that performs similar operations even faster than the pure Python version shown by Bjorn.</description>
@@ -31,77 +31,77 @@ Building upon that example, I spent some time writing a function using Numpy tha
     
     <item>
       <title>A Pandas read_csv crash course</title>
-      <link>https://joaopmatias.github.io/posts/2021-03-28-pandas-read-csv/</link>
+      <link>https://joaomatias.ml/posts/2021-03-28-pandas-read-csv/</link>
       <pubDate>Sun, 28 Mar 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://joaopmatias.github.io/posts/2021-03-28-pandas-read-csv/</guid>
+      <guid>https://joaomatias.ml/posts/2021-03-28-pandas-read-csv/</guid>
       <description>Pandas is the most popular Python Library to analyze tabular data and, when it comes to loading data, the function read_csv is very convenient. Upon opening its documentation one may be startled by the long list of arguments and options, but these allow the user to load tabular data in many different formats.
 For that reason, reading a simple CSV file in Pandas can become a bit complex. In order to become better acquainted with the parameters in read_csv I&amp;rsquo;ll share a few examples using it.</description>
     </item>
     
     <item>
       <title>Debugging an issue related with Java and Python interoperability</title>
-      <link>https://joaopmatias.github.io/posts/2021-03-06-debug-jep/</link>
+      <link>https://joaomatias.ml/posts/2021-03-06-debug-jep/</link>
       <pubDate>Mon, 08 Mar 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://joaopmatias.github.io/posts/2021-03-06-debug-jep/</guid>
+      <guid>https://joaomatias.ml/posts/2021-03-06-debug-jep/</guid>
       <description>I have been using JEP (Java Embedded Python) to allow calling the code written, in Python, by a team of data scientists in some Java micro-services for quite a while now. In general, this solution has been very stable and fast.
 However, a while back and after some specific changes in the Python code, we started seeing some segfaults occurring when the code, that would run smoothly in Python, was executed through JEP.</description>
     </item>
     
     <item>
       <title>Tuning the zsh shell using zinit and powerlevel10k</title>
-      <link>https://joaopmatias.github.io/posts/2021-02-06-zsh_part_1/</link>
+      <link>https://joaomatias.ml/posts/2021-02-06-zsh_part_1/</link>
       <pubDate>Sat, 06 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://joaopmatias.github.io/posts/2021-02-06-zsh_part_1/</guid>
+      <guid>https://joaomatias.ml/posts/2021-02-06-zsh_part_1/</guid>
       <description>As a programmer, the command line terminal is one of the most important tools I use. By default, the appearance of this application is very plain, but there are ways to customize its looks and functionality. So, I&amp;rsquo;d like to share some of my favorite tools that can improve the experience while using it. In particular, I&amp;rsquo;m a big fan of zinit and powerlevel10k. You can also see my shell configuration in my dotfiles.</description>
     </item>
     
     <item>
       <title>Lightweight alternatives to stream video on the browser</title>
-      <link>https://joaopmatias.github.io/posts/2020-08-06-vlc-replace-chrome/</link>
+      <link>https://joaomatias.ml/posts/2020-08-06-vlc-replace-chrome/</link>
       <pubDate>Thu, 06 Aug 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://joaopmatias.github.io/posts/2020-08-06-vlc-replace-chrome/</guid>
+      <guid>https://joaomatias.ml/posts/2020-08-06-vlc-replace-chrome/</guid>
       <description>Like many others, I often enjoy having youtube or twitch videos playing on the brackground while doing other tasks on the computer, and like most people I would have them conveniently playing on a separate tab of Chrome. Despite the convenience, there are some downside to using Chrome for that purpose like the excessive memory used by the browser, the whole area of the webpage occupied by things other than the video and the lack of an option to keep the video, say, on the corner of the computer screen.</description>
     </item>
     
     <item>
       <title>Debugging packages using R environments</title>
-      <link>https://joaopmatias.github.io/posts/2020-06-01-r-environments/</link>
+      <link>https://joaomatias.ml/posts/2020-06-01-r-environments/</link>
       <pubDate>Mon, 01 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://joaopmatias.github.io/posts/2020-06-01-r-environments/</guid>
+      <guid>https://joaomatias.ml/posts/2020-06-01-r-environments/</guid>
       <description>Did you ever ask yourself what would happen if you tweaked some functions in an R package? Recently, I found myself in a situation where I would like to perform and test some changes to an R package and started looking for ways to easily and clearly register some findings. This pursuit eventually led me to learn more about R environment, after all, whenever you install a package in your system you also add a number of environments associated with that package.</description>
     </item>
     
     <item>
       <title>Use R packages efficiently</title>
-      <link>https://joaopmatias.github.io/posts/2020-03-22-r-packages/</link>
+      <link>https://joaomatias.ml/posts/2020-03-22-r-packages/</link>
       <pubDate>Sun, 22 Mar 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://joaopmatias.github.io/posts/2020-03-22-r-packages/</guid>
+      <guid>https://joaomatias.ml/posts/2020-03-22-r-packages/</guid>
       <description>I would like to use this opportunity to write about some useful patterns to organize your R code. These may be well know to advanced R users, but are left out of most tutorials. So, sit back, relax, and enjoy some useful simple tips for R!
 1. Loading R packages The most famous way of loading packages in R is through the library() command. One disadvantage of this option is the fact that an error is thrown if the package is not found in the R environment.</description>
     </item>
     
     <item>
       <title>Bend R functions to your will </title>
-      <link>https://joaopmatias.github.io/posts/2020-02-22-r-functions-you-need/</link>
+      <link>https://joaomatias.ml/posts/2020-02-22-r-functions-you-need/</link>
       <pubDate>Sat, 22 Feb 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://joaopmatias.github.io/posts/2020-02-22-r-functions-you-need/</guid>
+      <guid>https://joaomatias.ml/posts/2020-02-22-r-functions-you-need/</guid>
       <description>In this post, I will mention a few R functions that are very useful to manipulate other functions or objects. If you are not acquainted with them, I hope that they open a whole world of possibilities in the R code you develop, as they did for me.
 1. Ellipsis Ellipsis (...) may be placed in the definition of a function to substitute multiple values that are given as arguments to that function and are not captured by other argument variables.</description>
     </item>
     
     <item>
       <title>First post</title>
-      <link>https://joaopmatias.github.io/posts/2020-01-30-first-post/</link>
+      <link>https://joaomatias.ml/posts/2020-01-30-first-post/</link>
       <pubDate>Thu, 30 Jan 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://joaopmatias.github.io/posts/2020-01-30-first-post/</guid>
+      <guid>https://joaomatias.ml/posts/2020-01-30-first-post/</guid>
       <description>Cheers I will start using this website to share some ideas that I&amp;rsquo;m interested in.
 Initially, I&amp;rsquo;ll be focusing on the tools that I&amp;rsquo;ve been using to perform data analysis and program, in general.
 I look forward to your comments.</description>
