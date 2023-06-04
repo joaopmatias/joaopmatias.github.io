@@ -2,9 +2,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on João Matias</title>
-    <link>https://joaomatias.ml/tags/</link>
+    <link>https://joaopmatias.github.io/tags/</link>
     <description>Recent content in Tags on João Matias</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://joaomatias.ml/tags/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://joaopmatias.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
