@@ -1,81 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
-    <loc>https://joaomatias.ml/posts/2021-05-16-is-numpy-fast/</loc>
+    <loc>https://joaopmatias.github.io/</loc>
+    <lastmod>2023-06-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://joaopmatias.github.io/posts/</loc>
+    <lastmod>2023-06-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://joaopmatias.github.io/posts/2023-06-02-git-sign/</loc>
+    <lastmod>2023-06-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://joaopmatias.github.io/posts/2021-05-16-is-numpy-fast/</loc>
     <lastmod>2021-05-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/posts/</loc>
-    <lastmod>2021-05-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/posts/2021-03-28-pandas-read-csv/</loc>
+  </url><url>
+    <loc>https://joaopmatias.github.io/posts/2021-03-28-pandas-read-csv/</loc>
     <lastmod>2021-03-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/posts/2021-03-06-debug-jep/</loc>
+  </url><url>
+    <loc>https://joaopmatias.github.io/posts/2021-03-06-debug-jep/</loc>
     <lastmod>2021-03-08T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/posts/2021-02-06-zsh_part_1/</loc>
+  </url><url>
+    <loc>https://joaopmatias.github.io/posts/2021-02-06-zsh_part_1/</loc>
     <lastmod>2021-02-06T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/about/</loc>
+  </url><url>
+    <loc>https://joaopmatias.github.io/about/</loc>
     <lastmod>2020-10-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/</loc>
-    <lastmod>2020-10-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/posts/2020-08-06-vlc-replace-chrome/</loc>
+  </url><url>
+    <loc>https://joaopmatias.github.io/posts/2020-08-06-vlc-replace-chrome/</loc>
     <lastmod>2020-08-06T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/posts/2020-06-01-r-environments/</loc>
+  </url><url>
+    <loc>https://joaopmatias.github.io/posts/2020-06-01-r-environments/</loc>
     <lastmod>2020-06-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/posts/2020-03-22-r-packages/</loc>
+  </url><url>
+    <loc>https://joaopmatias.github.io/posts/2020-03-22-r-packages/</loc>
     <lastmod>2020-03-22T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/posts/2020-02-22-r-functions-you-need/</loc>
+  </url><url>
+    <loc>https://joaopmatias.github.io/posts/2020-02-22-r-functions-you-need/</loc>
     <lastmod>2020-02-22T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/posts/2020-01-30-first-post/</loc>
+  </url><url>
+    <loc>https://joaopmatias.github.io/posts/2020-01-30-first-post/</loc>
     <lastmod>2020-01-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://joaopmatias.github.io/archives/</loc>
+  </url><url>
+    <loc>https://joaopmatias.github.io/categories/</loc>
+  </url><url>
+    <loc>https://joaopmatias.github.io/series/</loc>
+  </url><url>
+    <loc>https://joaopmatias.github.io/tags/</loc>
   </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/archives/</loc>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/categories/</loc>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/series/</loc>
-  </url>
-  
-  <url>
-    <loc>https://joaomatias.ml/tags/</loc>
-  </url>
-  
 </urlset>

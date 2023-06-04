@@ -1,3 +1,6 @@
 _site
 .sass-cache
 .jekyll-metadata
+
+# MacOS filesystem
+**/.DS_Store
