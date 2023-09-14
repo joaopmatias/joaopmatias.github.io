@@ -16,6 +16,66 @@
       <description>Nowadays, Git is an essential tool in software development. It allows developers to easily trace the history of all changes throughout the life of a code base with multiple contributors, and makes the development process a lot smoother.
 It also has many options that add both convenience and safety to the development process.
 However, it is often the case that developers struggle a bit seting up all git options they want on a new machine resulting in a series of google searches for the pages visited in the last time they were in the same situation.</description>
+      <content:encoded><![CDATA[<p>Nowadays, Git is an essential tool in software development. It allows developers to easily trace the history of all changes throughout the life of a code base with multiple contributors, and makes the development process a lot smoother.</p>
+<p>It also has many options that add both convenience and safety to the development process.</p>
+<p>However, it is often the case that developers struggle a bit seting up all git options they want on a new machine resulting in a series of google searches for the pages visited in the last time they were in the same situation.</p>
+<p>I&rsquo;d like to use this post to, hopefully, reduce the number of pages visited to 1. I&rsquo;ll list the commands needed to safely store your github credentials in your machine, and to sign commits created on your machine, so that it possible to validate the origin of a commit.</p>
+<h2 id="linux-debian-specific-steps">Linux (debian) Specific Steps</h2>
+<p>We start by listing the commands for the debian distribution.</p>
+<p>For starters, download some dependencies.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ sudo apt install git gnupg pass
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ wget https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.1.2/gcm-linux_amd64.2.1.2.deb
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ sudo dpkg -i gcm-linux_amd64.2.1.2.deb
+</span></span></code></pre></div><p>Then, set up the git user, and the credential store. Note that the same git user and email must be used in all configuration steps.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ git config --global user.name my-user-name
+</span></span><span style="display:flex;"><span>$ git config --global user.email my-email@domain
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ git-credential-manager configure
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ git config --global credential.credentialStore gpg
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ pass init <span style="color:#e6db74">&#34;my-user-name &lt;my-email@domain&gt;&#34;</span>
+</span></span></code></pre></div><h2 id="macos-specific-steps">MacOS Specific Steps</h2>
+<p>In MacOS, we download the dependencies using homebrew, for convenience.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ brew tap microsoft/git
+</span></span><span style="display:flex;"><span>$ brew update
+</span></span><span style="display:flex;"><span>$ brew install --cask gpg-suite pinentry-mac git-credential-manager-core
+</span></span></code></pre></div><p>Then, set up the git user, and the credential store. Note that the same git user and email must be used in all configuration steps.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ git config --global user.name my-user-name
+</span></span><span style="display:flex;"><span>$ git config --global user.email my-email@domain
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ git-credential-manager configure
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ git config --global credential.credentialStore keychain
+</span></span></code></pre></div><h2 id="common-steps">Common Steps</h2>
+<p>After running the steps laid out above, we will create a gpg key pair and configure git to use it to sign commits.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ gpg --full-generate-key
+</span></span><span style="display:flex;"><span>$ gpg --list-secret-keys --keyid-format<span style="color:#f92672">=</span>long
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ouput:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ------</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># sec   4096R/3AA5C34371567BD2 2016-03-10 [expires: 2017-03-10]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># uid                          my-user-name &lt;my-email@domain&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ssb   4096R/4BB6D45482678BE3 2016-03-10</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ git config --global user.signingkey 3AA5C34371567BD2
+</span></span><span style="display:flex;"><span>$ git config --global commit.gpgsign true
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ gpg --armor --export 3AA5C34371567BD2
+</span></span></code></pre></div><p>At this point, copy the gpg key from the output, beginning with <code>-----BEGIN PGP PUBLIC KEY BLOCK-----</code> and ending with <code>-----END PGP PUBLIC KEY BLOCK-----</code>, and add it to your github account. In order to do that, go to the github website and click on your profile, in the upper-right corner. Then, click <code>Settings &gt; Access &gt; SSH and GPG keys &gt; New GPG keys</code> and paste your gpg key.</p>
+<p>Finally, run a git command requiring authentication (to a github repository) and write your github user and password. If you enabled multi-factor authentication you may need to create a new access token to use in the place of password. In order to create one, go to the github website and click <code>Settings &gt; Developer settings &gt; Personal access tokens &gt; Generate new token</code>.</p>
+<p>And we&rsquo;re set!</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://github.com/git-ecosystem/git-credential-manager">https://github.com/git-ecosystem/git-credential-manager</a></li>
+<li><a href="https://github.com/git-ecosystem/git-credential-manager/blob/main/docs/credstores.md#gpgpass-compatible-files">https://github.com/git-ecosystem/git-credential-manager/blob/main/docs/credstores.md#gpgpass-compatible-files</a></li>
+<li><a href="https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git#git-credential-manager">https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git#git-credential-manager</a></li>
+<li><a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key">https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key</a></li>
+<li><a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key">https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key</a></li>
+</ul>
+]]></content:encoded>
     </item>
     
     <item>
@@ -27,6 +87,129 @@ However, it is often the case that developers struggle a bit seting up all git o
       <description>I recently came accross an interesting blog post by Bjorn Madsen, Is Numpy really faster.
 It is a short post displaying one example where a python snippet using Numpy is much slower than the version written in pure Python due to some overheads associated to Numpy.
 Building upon that example, I spent some time writing a function using Numpy that performs similar operations even faster than the pure Python version shown by Bjorn.</description>
+      <content:encoded><![CDATA[<p>I recently came accross an interesting blog post by Bjorn Madsen, <a href="https://root-11.github.io/content/is-numpy-really-faster/index.html">Is Numpy really faster</a>.</p>
+<p>It is a short post displaying one example where a python snippet using Numpy is much slower than the version written in pure Python due to some overheads associated to Numpy.</p>
+<p>Building upon that example, I spent some time writing a function using Numpy that performs similar operations even faster than the pure Python version shown by Bjorn. There is a catch however, I replaced a for loop in the benchmark code by a vector operation, which is the scenario where Numpy really shines.</p>
+<p>Let us take look!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>v1 <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>]
+</span></span><span style="display:flex;"><span>v2 <span style="color:#f92672">=</span> [<span style="color:#ae81ff">2.4</span>, <span style="color:#ae81ff">3</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">f1</span>(v1, v2):  <span style="color:#75715e"># &lt;--- Using numpy.cross</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> list(np<span style="color:#f92672">.</span>cross(v1, v2))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">f2</span>(v1, v2):  <span style="color:#75715e"># &lt;---- Using python</span>
+</span></span><span style="display:flex;"><span>    a1, a2, a3 <span style="color:#f92672">=</span> v1
+</span></span><span style="display:flex;"><span>    b1, b2, b3 <span style="color:#f92672">=</span> v2
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> [a2 <span style="color:#f92672">*</span> b3 <span style="color:#f92672">-</span> a3 <span style="color:#f92672">*</span> b2, <span style="color:#f92672">-</span>(a1 <span style="color:#f92672">*</span> b3 <span style="color:#f92672">-</span> a3 <span style="color:#f92672">*</span> b1), a1 <span style="color:#f92672">*</span> b2 <span style="color:#f92672">-</span> a2 <span style="color:#f92672">*</span> b1]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">x1</span>():  
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">100000</span>):
+</span></span><span style="display:flex;"><span>        v3 <span style="color:#f92672">=</span> f1(v1, v2)  <span style="color:#75715e"># repeated calls for profiling usage of numpy</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">x2</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">100000</span>):
+</span></span><span style="display:flex;"><span>        v4 <span style="color:#f92672">=</span> f2(v1, v2)  <span style="color:#75715e"># # repeated calls for profiling usage of python.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">x3</span>():
+</span></span><span style="display:flex;"><span>    v22 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>tile(np<span style="color:#f92672">.</span>array(v2, dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>float64), (<span style="color:#ae81ff">100000</span>, <span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>    v11 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>tile(np<span style="color:#f92672">.</span>array(v1, dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>float64), (<span style="color:#ae81ff">100000</span>, <span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>    np<span style="color:#f92672">.</span>cross(v11, v22)
+</span></span></code></pre></div><p><code>x3()</code> is a new function implementing a vector operation in Numpy. Then, I wrote all these functions in a jupyter notebook and used the <code>%prun</code> magic to analyse the results. Here they are.</p>
+<p>Original function using Numpy:</p>
+<pre tabindex="0"><code>&gt;&gt;&gt; %prun x1()
+
+         8200004 function calls (7900004 primitive calls) in 5.442 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   100000    1.739    0.000    5.042    0.000 numeric.py:1485(cross)
+   600000    0.818    0.000    1.262    0.000 numeric.py:1341(normalize_axis_tuple)
+   300000    0.757    0.000    2.354    0.000 numeric.py:1404(moveaxis)
+   300000    0.384    0.000    0.384    0.000 {built-in method numpy.array}
+   900000    0.252    0.000    0.252    0.000 {built-in method numpy.core._multiarray_umath.normalize_axis_index}
+400000/100000    0.211    0.000    5.117    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
+   100000    0.206    0.000    5.395    0.000 &lt;ipython-input-78-bfb5de128972&gt;:7(f1)
+   600000    0.157    0.000    0.296    0.000 numeric.py:1391(&lt;listcomp&gt;)
+   300000    0.146    0.000    2.670    0.000 &lt;__array_function__ internals&gt;:2(moveaxis)
+  1900000    0.141    0.000    0.141    0.000 {built-in method builtins.len}
+   300000    0.107    0.000    0.107    0.000 {built-in method builtins.sorted}
+   300000    0.096    0.000    0.096    0.000 {method &#39;transpose&#39; of &#39;numpy.ndarray&#39; objects}
+   200000    0.058    0.000    0.389    0.000 _asarray.py:23(asarray)
+   100000    0.057    0.000    5.189    0.000 &lt;__array_function__ internals&gt;:2(cross)
+   600000    0.053    0.000    0.053    0.000 {built-in method _operator.index}
+   300000    0.048    0.000    0.048    0.000 numeric.py:1467(&lt;listcomp&gt;)
+        1    0.047    0.047    5.442    5.442 &lt;ipython-input-78-bfb5de128972&gt;:17(x1)
+   300000    0.046    0.000    0.046    0.000 {method &#39;insert&#39; of &#39;list&#39; objects}
+   100000    0.036    0.000    0.036    0.000 {built-in method numpy.empty}
+   300000    0.034    0.000    0.034    0.000 numeric.py:1400(_moveaxis_dispatcher)
+   100000    0.034    0.000    0.034    0.000 {built-in method numpy.promote_types}
+   100000    0.014    0.000    0.014    0.000 numeric.py:1481(_cross_dispatcher)
+        1    0.000    0.000    5.442    5.442 {built-in method builtins.exec}
+        1    0.000    0.000    5.442    5.442 &lt;string&gt;:1(&lt;module&gt;)
+        1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
+</code></pre><p>Original function written in pure Python:</p>
+<pre tabindex="0"><code>&gt;&gt;&gt; %prun x2()
+
+         100004 function calls in 0.066 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   100000    0.045    0.000    0.045    0.000 &lt;ipython-input-78-bfb5de128972&gt;:11(f2)
+        1    0.021    0.021    0.066    0.066 &lt;ipython-input-78-bfb5de128972&gt;:22(x2)
+        1    0.000    0.000    0.066    0.066 {built-in method builtins.exec}
+        1    0.000    0.000    0.066    0.066 &lt;string&gt;:1(&lt;module&gt;)
+        1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
+</code></pre><p>New function replaced a for loop with Numpy vectorization:</p>
+<pre tabindex="0"><code>&gt;&gt;&gt; %prun x3()
+
+         117 function calls (114 primitive calls) in 0.005 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.004    0.004    0.004    0.004 numeric.py:1485(cross)
+        2    0.001    0.001    0.001    0.001 {method &#39;repeat&#39; of &#39;numpy.ndarray&#39; objects}
+        7    0.000    0.000    0.000    0.000 {built-in method numpy.array}
+        2    0.000    0.000    0.001    0.001 shape_base.py:1171(tile)
+        3    0.000    0.000    0.000    0.000 numeric.py:1404(moveaxis)
+        6    0.000    0.000    0.000    0.000 numeric.py:1341(normalize_axis_tuple)
+        1    0.000    0.000    0.005    0.005 {built-in method builtins.exec}
+      6/3    0.000    0.000    0.005    0.002 {built-in method numpy.core._multiarray_umath.implement_array_function}
+        1    0.000    0.000    0.005    0.005 &lt;ipython-input-78-bfb5de128972&gt;:26(x3)
+        4    0.000    0.000    0.000    0.000 {method &#39;reshape&#39; of &#39;numpy.ndarray&#39; objects}
+        3    0.000    0.000    0.000    0.000 {method &#39;transpose&#39; of &#39;numpy.ndarray&#39; objects}
+        6    0.000    0.000    0.000    0.000 numeric.py:1391(&lt;listcomp&gt;)
+        3    0.000    0.000    0.000    0.000 {built-in method builtins.sorted}
+        9    0.000    0.000    0.000    0.000 {built-in method numpy.core._multiarray_umath.normalize_axis_index}
+        2    0.000    0.000    0.001    0.001 &lt;__array_function__ internals&gt;:2(tile)
+       21    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        3    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(moveaxis)
+        4    0.000    0.000    0.000    0.000 shape_base.py:1243(&lt;genexpr&gt;)
+        1    0.000    0.000    0.005    0.005 &lt;string&gt;:1(&lt;module&gt;)
+        6    0.000    0.000    0.000    0.000 {built-in method _operator.index}
+        6    0.000    0.000    0.000    0.000 shape_base.py:1253(&lt;genexpr&gt;)
+        3    0.000    0.000    0.000    0.000 {method &#39;insert&#39; of &#39;list&#39; objects}
+        1    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
+        3    0.000    0.000    0.000    0.000 numeric.py:1400(_moveaxis_dispatcher)
+        2    0.000    0.000    0.000    0.000 _asarray.py:23(asarray)
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.all}
+        1    0.000    0.000    0.000    0.000 {built-in method numpy.promote_types}
+        1    0.000    0.000    0.000    0.000 numeric.py:1481(_cross_dispatcher)
+        1    0.000    0.000    0.004    0.004 &lt;__array_function__ internals&gt;:2(cross)
+        2    0.000    0.000    0.000    0.000 shape_base.py:1167(_tile_dispatcher)
+        1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
+        3    0.000    0.000    0.000    0.000 numeric.py:1467(&lt;listcomp&gt;)
+</code></pre><p>In the end, the Numpy vectorization can be faster overall, but always remember to use Numpy wisely!</p>
+<p>I hope you enjoyed this short experience and please visit the <a href="https://root-11.github.io/content/is-numpy-really-faster/index.html">original post</a> by Bjorn Madsen!</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -37,6 +220,123 @@ Building upon that example, I spent some time writing a function using Numpy tha
       <guid>https://joaopmatias.github.io/posts/2021-03-28-pandas-read-csv/</guid>
       <description>Pandas is the most popular Python Library to analyze tabular data and, when it comes to loading data, the function read_csv is very convenient. Upon opening its documentation one may be startled by the long list of arguments and options, but these allow the user to load tabular data in many different formats.
 For that reason, reading a simple CSV file in Pandas can become a bit complex. In order to become better acquainted with the parameters in read_csv I&amp;rsquo;ll share a few examples using it.</description>
+      <content:encoded><![CDATA[<p>Pandas is the most popular Python Library to analyze tabular data and, when it comes to loading data, the function <code>read_csv</code> is very convenient. Upon opening <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html">its documentation</a> one may be startled by the long list of arguments and options, but these allow the user to load tabular data in many different formats.</p>
+<p>For that reason, reading a simple CSV file in Pandas can become a bit complex. In order to become better acquainted with the parameters in <code>read_csv</code> I&rsquo;ll share a few examples using it. Despite only focusing on a subset of all parameters, I hope it provides some value.</p>
+<h2 id="signature">Signature</h2>
+<p>We will only focus a subset of the arguments of <code>read_csv</code>. They are shown below with their default values. Only the <code>filepath</code> is a positional argument.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pandas<span style="color:#f92672">.</span>read_csv(filepath_or_buffer: FilePathOrBuffer,
+</span></span><span style="display:flex;"><span>                sep<span style="color:#f92672">=</span>lib<span style="color:#f92672">.</span>no_default,
+</span></span><span style="display:flex;"><span>                header<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;infer&#34;</span>,
+</span></span><span style="display:flex;"><span>                names<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>,
+</span></span><span style="display:flex;"><span>                index_col<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>,
+</span></span><span style="display:flex;"><span>                dtype<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>,
+</span></span><span style="display:flex;"><span>                converters<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>,
+</span></span><span style="display:flex;"><span>                parse_dates<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,
+</span></span><span style="display:flex;"><span>                infer_datetime_format<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,
+</span></span><span style="display:flex;"><span>                date_parser<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>    )
+</span></span></code></pre></div><ul>
+<li>
+<p><code>filepath_or_buffer</code> &ndash; A path-like or string object describing the path to the file with data.</p>
+</li>
+<li>
+<p><code>sep</code> &ndash; The separator character used in the file. For CSV (comma separated values) files use <code>,</code>, but other characters like tabs, <code>\t</code>, may also be used. It is <code>,</code> by default.</p>
+</li>
+<li>
+<p><code>header</code> &ndash; Integer or sequence describing the indices of the rows to use as column names. By default, it is <code>&quot;infer&quot;</code>. If it is a sequence it creates <code>MultiIndex</code> column names.</p>
+</li>
+<li>
+<p><code>names</code> &ndash; Sequence containing the name for the dataframe columns. It is ignored if <code>header=0</code>.</p>
+</li>
+<li>
+<p><code>index_col</code> &ndash; Integer, string or sequence describing which columns of the file are used as index. If it is a sequence, it creates a <code>MultiIndex</code> index. If <code>False</code> it assigns consecutive integers starting at <code>0</code> to the index.</p>
+</li>
+<li>
+<p><code>dtype</code> &ndash; Type name or dictionary describing the type of each dataframe column. For example, <code>{‘a’: np.float64, ‘b’: np.int32, ‘c’: ‘Int64’}</code>.</p>
+</li>
+<li>
+<p><code>converters</code> &ndash; Dictionary of functions for converting values in certain columns.</p>
+</li>
+<li>
+<p><code>parse_dates</code> &ndash; If <code>True</code> it parses the index. If it is a list of integers it parses each corresponding column as a date column. If it is a list of lists it parses the contents corresponding to each inner list into a single date column.</p>
+</li>
+<li>
+<p><code>infer_datetime_format</code> &ndash; If <code>True</code> and <code>parse_dates</code> is enabled, pandas will attempt to infer the format of the datetime strings in the columns.</p>
+</li>
+<li>
+<p><code>date_parser</code> &ndash; Function to use for converting a sequence of string columns to an array of datetime instances. It is <code>dateutil.parser.parser</code> by default.</p>
+</li>
+</ul>
+<h1 id="examples">Examples</h1>
+<p>Below, we show some examples reading a data file together with the output of the resulting dataframe in a jupyter notebook.</p>
+<h2 id="1">1)</h2>
+<p>Consider a file with 3 columns.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>&#34;2021-01-01 00:15:00+00&#34;	0	&#34;0&#34;
+</span></span><span style="display:flex;"><span>&#34;2021-01-01 00:30:00+00&#34;	1	&#34;1&#34;
+</span></span><span style="display:flex;"><span>&#34;2021-01-01 00:45:00+00&#34;	2	&#34;2&#34;
+</span></span><span style="display:flex;"><span>&#34;2021-01-01 01:00:00+00&#34;	3	&#34;3&#34;
+</span></span><span style="display:flex;"><span>&#34;2021-01-01 01:15:00+00&#34;	4	&#34;4&#34;
+</span></span></code></pre></div><h3 id="11">1.1)</h3>
+<p>In the first snippet, we use the left column as index and transform it into a date object. We also assign <code>col1</code> and <code>col2</code> as column names.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pandas<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;example.csv&#34;</span>,
+</span></span><span style="display:flex;"><span>                sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>,
+</span></span><span style="display:flex;"><span>                names<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;col1&#34;</span>, <span style="color:#e6db74">&#34;col2&#34;</span>],
+</span></span><span style="display:flex;"><span>                index_col<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>                parse_dates<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>    )
+</span></span></code></pre></div><p>The result is
+<img loading="lazy" src="/images/blog/dataframe/df_1.1.png" type="" alt="1.1"  /></p>
+<h3 id="12">1.2)</h3>
+<p>Below, we use the row numbers as indexes and assign <code>col0</code>, <code>col1</code> and <code>col2</code> as column names. The entries in the first column are transformed into date objects.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pandas<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;example.csv&#34;</span>,
+</span></span><span style="display:flex;"><span>                sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>,
+</span></span><span style="display:flex;"><span>                names<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;col0&#34;</span>, <span style="color:#e6db74">&#34;col1&#34;</span>, <span style="color:#e6db74">&#34;col2&#34;</span>],
+</span></span><span style="display:flex;"><span>                index_col<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,
+</span></span><span style="display:flex;"><span>                parse_dates<span style="color:#f92672">=</span>[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    )
+</span></span></code></pre></div><p>The result is
+<img loading="lazy" src="/images/blog/dataframe/df_1.2.png" type="" alt="1.2"  /></p>
+<h3 id="13">1.3)</h3>
+<p>Now, we use the entries in the middle column as indexes and assign <code>col0</code> and <code>col2</code> as column names. The entries in the first column are transformed into date objects.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pandas<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;example.csv&#34;</span>,
+</span></span><span style="display:flex;"><span>                sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>,
+</span></span><span style="display:flex;"><span>                names<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;col0&#34;</span>, <span style="color:#e6db74">&#34;col2&#34;</span>],
+</span></span><span style="display:flex;"><span>                index_col<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>                parse_dates<span style="color:#f92672">=</span>[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    )
+</span></span></code></pre></div><p>The result is
+<img loading="lazy" src="/images/blog/dataframe/df_1.3.png" type="" alt="1.3"  /></p>
+<h2 id="2">2)</h2>
+<p>Consider a different file with 3 columns.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>&#34;col0&#34;,&#34;col1&#34;,&#34;col2&#34;
+</span></span><span style="display:flex;"><span>&#34;2021-01-01 00:15:00+00&#34;,0,&#34;0&#34;
+</span></span><span style="display:flex;"><span>&#34;2021-01-01 00:30:00+00&#34;,1,&#34;1&#34;
+</span></span><span style="display:flex;"><span>&#34;2021-01-01 00:45:00+00&#34;,2,&#34;2&#34;
+</span></span><span style="display:flex;"><span>&#34;2021-01-01 01:00:00+00&#34;,3,&#34;3&#34;
+</span></span><span style="display:flex;"><span>&#34;2021-01-01 01:15:00+00&#34;,4,&#34;4&#34;
+</span></span></code></pre></div><h3 id="21">2.1)</h3>
+<p>In this case, the separator argument can be omitted. The column names are infered to be <code>col0</code>, <code>col1</code> and <code>col2</code> and we use the left column entries as indexes. The indices are transformed into date objects.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pandas<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;example.csv&#34;</span>,
+</span></span><span style="display:flex;"><span>                index_col<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;col0&#34;</span>,
+</span></span><span style="display:flex;"><span>                parse_dates<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>    )
+</span></span></code></pre></div><p>The result is
+<img loading="lazy" src="/images/blog/dataframe/df_2.1.png" type="" alt="2.1"  /></p>
+<h3 id="22">2.2)</h3>
+<p>Finally, the column names are infered to be <code>col0</code>, <code>col1</code> and <code>col2</code> and we use the middle column entries as indexes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pandas<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;example.csv&#34;</span>,
+</span></span><span style="display:flex;"><span>                index_col<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>                parse_dates<span style="color:#f92672">=</span>[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    )
+</span></span></code></pre></div><p>The result is
+<img loading="lazy" src="/images/blog/dataframe/df_2.2.png" type="" alt="2.2"  /></p>
+<h1 id="conclusion">Conclusion</h1>
+<p>That is it. I hope you enjoyed the post and feel free to reach out if you have any remarks!</p>
+<h1 id="reference">Reference</h1>
+<ul>
+<li><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html">https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html</a></li>
+</ul>
+]]></content:encoded>
     </item>
     
     <item>
@@ -47,6 +347,38 @@ For that reason, reading a simple CSV file in Pandas can become a bit complex. I
       <guid>https://joaopmatias.github.io/posts/2021-03-06-debug-jep/</guid>
       <description>I have been using JEP (Java Embedded Python) to allow calling the code written, in Python, by a team of data scientists in some Java micro-services for quite a while now. In general, this solution has been very stable and fast.
 However, a while back and after some specific changes in the Python code, we started seeing some segfaults occurring when the code, that would run smoothly in Python, was executed through JEP.</description>
+      <content:encoded><![CDATA[<p>I have been using <a href="https://github.com/ninia/jep">JEP</a> (Java Embedded Python) to allow calling the code written, in Python, by a team of data scientists in some Java micro-services for quite a while now. In general, this solution has been very stable and fast.</p>
+<p>However, a while back and after some specific changes in the Python code, we started seeing some segfaults occurring when the code, that would run smoothly in Python, was executed through JEP. Fortunately, we figured out a solution and I would like to share my experience while debugging this issue. I hope some of it resonate with others!</p>
+<p>First and foremost, I&rsquo;d like to say Thank You to the JEP developers that were very helpful and provided most of the ideas that we then tried!</p>
+<h1 id="the-issue">The issue</h1>
+<p>The issue is documented <a href="https://github.com/ninia/jep/issues/241">here</a>. In broad strokes, running some models from the <code>pmdarima</code> or <code>statsmodels</code> packages was causing a segfault and due to the sudden crash, a traceback was not available. Again, this issue would only occur for some models and, whenever the program did not crash, the outputs would match the results of running directly in python.</p>
+<h1 id="writing-a-minimal-example">Writing a minimal example</h1>
+<p>The first step was to attempt to pinpoint the part of the code executed immediately before the application crashed. Unfortunately, we did not have a debugging tailored to JEP, so we resorted to good old print statements in the middle of the statsmodels source code, that had to be rebuilt and reinstalled every time after adding more print statements.</p>
+<p>This led to the functions <code>dgetrf</code> and <code>zgetrf</code> in <code>statsmodels/tsa/statespace/_tools.pyx.in</code>. These functions are part of Scipy and, in particular, part of the module <code>scipy.linalg.cython_lapack</code>. After that, I wrote <a href="https://github.com/joaopmatias/jep/blob/replicate_sigill/temp_sandbox/src/main/python/cython_examples.pyx">this cython minimal example</a> that displayed a disparate behavior depending on whether it was run in JEP or directly in Python. However, we were still far from understanding the issue, partly due complexity of Scipy.</p>
+<p>Soon after, an interesting behavior was pointed out to us: the program would not crash if Scipy were built from source in the machine running it, beforehand. This procedure worked in some cases, but we still saw crashes in some cases different from my minimal example. Nonetheless, it showed us that there many factors to consider.</p>
+<h1 id="reading-the-source-code">Reading the source code</h1>
+<p>As we get deeper in JEP, it is important to be aware of some of its inner gears. In order to run Python code, JEP uses two different bridging technologies: the CPython C-API and the JNI (Java native interface). The first allows to call Python code from C and the second allows to call C code from Java. Combined they allow calling Python code from Java.</p>
+<p>The next question was to analyze in which part of execution the crash occurred. The Python official website has plenty of documentation on CPython C-API, so I figured I could start by writing a C program, like <a href="https://github.com/joaopmatias/jep/blob/replicate_sigill/temp_sandbox/src/main/c/c_run.c">this</a>, that would call Python code. Curiously, the first draft would not cause any segfaults, which was due to the fact it was not mimicking what JEP does. JEP uses threading, it initiates the Python process in a separate thread to then execute the Python commands, written by the programmer, in the same thread as the main Java application. Luckily, the JEP developers provided some C code that mimicked this behavior and we were able to adapt it to our examples and replicate some segfaults!</p>
+<p>Despite the progress, we still could not understand why some Python programs would work flawlessly, in this setting, and others crashed.</p>
+<h1 id="running-scipy-test-suite">Running Scipy test suite</h1>
+<p>Up to this point we only had two Python examples displaying the crashes, so I searched for more in the test suite of Scipy. Using commands below, I discovered some additional Python examples and added them <a href="https://github.com/joaopmatias/jep/blob/replicate_sigill/temp_sandbox/src/main/python/examples.py">here</a>:</p>
+<pre tabindex="0"><code>$ jep
+&gt;&gt;&gt; import scipy
+&gt;&gt;&gt; scipy.test()
+
+...
+
+$ jep
+&gt;&gt;&gt; import pytest
+&gt;&gt;&gt; pytest.main([&#39;--pyargs&#39;, &#39;scipy.linalg&#39;])
+</code></pre><h1 id="is-it-the-threading">Is it the threading?</h1>
+<p>As was pointed above, JEP uses more than one thread to run the Python code. Motivated by that, I tried to create a separate thread within Python, using the <code>threading</code> module, and run the examples I had in it. Surprisingly, this would work without problems! So, we looked more closely at the source code of the <code>threading</code> module in CPython. Its implementation contains a function called <code>PyThread_start_new_thread</code> that piqued our curiosity. In fact, using it in place of the function <code>pthread_create</code> in our C example would make the Python code run without crashes!</p>
+<p>Poking a bit in the last function showed that the crashes were related to the value of a variable <code>THREAD_STACK_SIZE</code> that was initialized with the value <code>0x1000000</code>. This happens to be hexadecimal for 16777216 and comparing with the default stack size of a Java application of 1MB, it is much larger. As a result, we increased the stack size of the Java program running JEP did not see more segfaults.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>After a lot of trial and error, we did find a likely cause for the segfaults and the results so far have been very good. This was also a great incentive to look into many concepts that I would not have otherwise.</p>
+<p>Finally, the solution we found consists of increasing the stack size of the Java program by adding the parameter <code>-Xss4m</code>.</p>
+<p>I hope you enjoyed! As always, feel free to reach out with comments or remarks.</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -56,6 +388,50 @@ However, a while back and after some specific changes in the Python code, we sta
       
       <guid>https://joaopmatias.github.io/posts/2021-02-06-zsh_part_1/</guid>
       <description>As a programmer, the command line terminal is one of the most important tools I use. By default, the appearance of this application is very plain, but there are ways to customize its looks and functionality. So, I&amp;rsquo;d like to share some of my favorite tools that can improve the experience while using it. In particular, I&amp;rsquo;m a big fan of zinit and powerlevel10k. You can also see my shell configuration in my dotfiles.</description>
+      <content:encoded><![CDATA[<p>As a programmer, the command line terminal is one of the most important tools I use. By default, the appearance of this application is very plain, but there are ways to customize its looks and functionality. So, I&rsquo;d like to share some of my favorite tools that can improve the experience while using it. In particular, I&rsquo;m a big fan of <a href="https://github.com/zdharma/zinit">zinit</a> and <a href="https://github.com/romkatv/powerlevel10k">powerlevel10k</a>. You can also see my shell configuration in my <a href="https://github.com/joaopmatias/dotfiles">dotfiles</a>.</p>
+<p>I switched to zsh (pronounced z-shell) a while back when it became the default in macOS Catalina (replacing bash). It offers some additional features and can be easily customized using frameworks like <a href="https://github.com/ohmyzsh/ohmyzsh">oh-my-zsh</a> or <a href="https://github.com/sorin-ionescu/prezto">prezto</a>. Despite the convenience, these frameworks add a lot of bloat to the shell configuration of which most people only use part, so I kept searching for more minimal tools that achieve similar results.</p>
+<p>If you like to have an idea of the final result, here is a video recorded using <a href="https://asciinema.org/">asciinema</a>.</p>
+<p><a href="https://asciinema.org/a/3WvHWrMqBNY5PU3DiaFwBAGwh">
+  <img loading="lazy" src="https://asciinema.org/a/3WvHWrMqBNY5PU3DiaFwBAGwh.svg" alt="asciicast"  /></a></p>
+<p>One of those tools is <a href="https://github.com/zdharma/zinit">zinit</a>!</p>
+<h1 id="zinit">zinit</h1>
+<p><a href="https://github.com/zdharma/zinit">zinit</a> is a project that provides the option to combine shell configuration scripts from multiple sources (including plugins from <code>oh-my-zsh</code> and <code>prezto</code>!). Furthermore, it gives some control over the timing in which each script is loaded, including after displaying the shell prompt, thus reducing the startup time. The main setback is its learning curve that can be countered by the extensive documentation and examples available.</p>
+<p>After installing zinit, the configuration scripts can be taken from github repositories (or gitlab, or bitbucket for that matter) by adding a command like the following in <code>.zshrc</code></p>
+<pre tabindex="0"><code>zinit light-mode OMZL::history.zsh
+</code></pre><p>The purpose of the command in the example is setting some aliases and environment variables that manage the history of the terminal shell. More concretely, it runs the script <code>history.zsh</code> in the <code>lib</code> folder of the <code>oh-my-zsh</code> github repository since, in zinit, <code>OMZL</code> can be used as an abbreviation for that location. The modifier <code>light-mode</code> disables some reporting and tracking functionalities used to debug the script and that usually are not needed.</p>
+<p>It is also possible to combine multiple commands using a <code>for</code> syntax as below</p>
+<pre tabindex="0"><code>zinit light-mode depth=1 for \
+	romkatv/powerlevel10k \
+	OMZL::history.zsh \
+	blockf OMZL::completion.zsh
+</code></pre><p>In particular, this command also starts up the shell theme <code>powerlevel10k</code> that will be mentioned again later.</p>
+<h1 id="more-plugins">More plugins!</h1>
+<p>I use a few other plugins that are loaded by the following command in <code>.zshrc</code>.</p>
+<pre tabindex="0"><code>zinit wait lucid light-mode depth=1 for \
+    zinit-zsh/z-a-patch-dl \
+    zinit-zsh/z-a-bin-gem-node \
+	atinit&#34;zicompinit; zicdreplay&#34; \
+		zdharma/fast-syntax-highlighting \
+	zdharma/history-search-multi-word \
+	atload&#34;bindkey &#39;^[[A&#39; history-substring-search-up; \
+			bindkey &#39;^[[B&#39; history-substring-search-down&#34; \
+		zsh-users/zsh-history-substring-search
+</code></pre><p>There are a few modifiers that make the plugins work flawlessly and that you may read about in the <a href="https://zdharma.org/zinit/wiki/">zinit wiki</a>. The most relevant is <code>wait</code>, which enables the turbo-mode. This option makes the shell wait for the prompt to be displayed before loading the associated plugins.</p>
+<p>The last two plugins listed in the command help navigating through entries in the commands history. <a href="https://github.com/zsh-users/zsh-history-substring-search">zsh-users/zsh-history-substring-search</a> allows the users to scroll, using the up and down arrows, through the entries of the history that contain some given subtstrings. <a href="https://github.com/zdharma/history-search-multi-word">zdharma/history-search-multi-word</a> performs a similar action by pressing <code>Control+R</code>, but has a slightly different interface.</p>
+<p>zdharma, the group that maintains zinit, also maintains some impressive plugins that can replace older and slower plugins that have been shared for years on the internet. One example is <a href="https://github.com/zdharma/fast-syntax-highlighting">Fast Syntax Highlighting</a>. This plugin highlights the shell commands to improve their appearance and readability. It does so very quickly and shows a significant difference in speed when compared to other options like <a href="https://github.com/zsh-users/zsh-syntax-highlighting">zsh-syntax-highlighting</a> (check the video below).</p>
+<p><a href="https://asciinema.org/a/112367">
+  <img loading="lazy" src="https://asciinema.org/a/112367.svg" alt="asciicast"  /></a>
+(source: <a href="https://github.com/zdharma/fast-syntax-highlighting#performance">fast-syntax-highlighting performance</a>)</p>
+<h1 id="powerlevel10k">powerlevel10k</h1>
+<p><code>powerlevel10k</code> is a theme based on vim&rsquo;s <code>powerline</code> so its look does not disappoint. It stands out from other similar looking themes due to its responsiveness. On my daily use, I&rsquo;ve never noticed it lagging, even when pressing the return key repeatedly. Furthermore, it has the option to load instantly uppon openning a new terminal session by adding the following in <code>.zshrc</code></p>
+<pre tabindex="0"><code>if [[ -r &#34;${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh&#34; ]]; then
+  source &#34;${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh&#34;
+fi
+</code></pre><p>It is also very easy to configure and provides plently of options to tweak. Just use the command <code>p10k configure</code> (example below) to run the wizard. After configuring the theme, the settings are saved in the file <code>.p10k.zsh</code> which can be edited separately, too (at the user&rsquo;s risk, though). For example, one can place the time in the left side of the shell by changing the property <code>POWERLEVEL9K_LEFT_PROMPT_ELEMENTS</code>, among other options.</p>
+<p><a href="https://asciinema.org/a/fUvbm1lbFXZ6bOM4uhAjfqpOo">
+  <img loading="lazy" src="https://asciinema.org/a/fUvbm1lbFXZ6bOM4uhAjfqpOo.svg" alt="asciicast"  /></a></p>
+<p>I hope you enjoyed these tips and learned something new! Feel free to reach out if you have comments.</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -65,6 +441,30 @@ However, a while back and after some specific changes in the Python code, we sta
       
       <guid>https://joaopmatias.github.io/posts/2020-08-06-vlc-replace-chrome/</guid>
       <description>Like many others, I often enjoy having youtube or twitch videos playing on the brackground while doing other tasks on the computer, and like most people I would have them conveniently playing on a separate tab of Chrome. Despite the convenience, there are some downside to using Chrome for that purpose like the excessive memory used by the browser, the whole area of the webpage occupied by things other than the video and the lack of an option to keep the video, say, on the corner of the computer screen.</description>
+      <content:encoded><![CDATA[<p>Like many others, I often enjoy having youtube or twitch videos playing on the brackground while doing other tasks on the computer, and like most people I would have them conveniently playing on a separate tab of Chrome. Despite the convenience, there are some downside to using Chrome for that purpose like the excessive memory used by the browser, the whole area of the webpage occupied by things other than the video and the lack of an option to keep the video, say, on the corner of the computer screen. These drawbacks drove me to search some alternatives and I&rsquo;d like to share my set up.</p>
+<h2 id="disclaimer">Disclaimer</h2>
+<p>The options shown were tested in MacOS and it is possible that they may not work in a different OS.</p>
+<p>Let us start by the mediaplayer.</p>
+<h2 id="vlc-window">VLC window</h2>
+<p>This is an extremely popular mediaplayer and it is no surprise that it is capable of playing video directly from Youtube or Twitch (the latter has a caveat, more on that later). For a better experience, I prefer to have a window just for the video and without any control buttons, which can be achieved by unchecking <em>Video decorations</em> in <em>Preferences &gt; Video</em>. Beware that version 3.0.9 showed problems resizing the window when this option was unchecked.</p>
+<p><img loading="lazy" src="/images/blog/video_decorations.png" type="" alt="VLC Preferences"  /></p>
+<p>I also like adding the option <em>Video &gt; Float on Top</em> and the controls <em>View &gt; Show Previous &amp; Next Buttons</em> and <em>View &gt; Show Shuffle &amp; Repeat Buttons</em>.</p>
+<h2 id="playing-youtube-videos">Playing Youtube videos</h2>
+<p>Since VLC is looking better now, you can try playing a Youtube video. Simply, copy the video link, paste it in <em>File &gt; Open Network&hellip;</em> and enjoy!</p>
+<h2 id="update-vlc-lua-playlist-script">Update VLC Lua playlist script</h2>
+<p>Some older versions of VLC may have some issues playing some videos. One possible solution is updating a specific file. You can try deleting the file <code>/Applications/VLC.app/Contents/MacOS/share/lua/playlist/youtube.luac</code> and replacing it with a <a href="https://github.com/videolan/vlc/blob/master/share/lua/playlist/youtube.lua">newer version</a>.</p>
+<h2 id="video-playlists">Video playlists</h2>
+<p>One easy way to make a playlist of Youtube videos is by creating a plaintext file with the <code>.m3u</code> extension with the following format.</p>
+<pre tabindex="0"><code>#EXTM3U
+#EXTINF:1,1 - This is a fun video
+https://www.youtube.com/watch?v=dQw4w9WgXcQ
+#EXTINF:1,1 - This is a fun video 2
+https://www.youtube.com/watch?v=kfVsfOSbJY0
+</code></pre><h2 id="streamlink">streamlink</h2>
+<p>The software <a href="https://streamlink.github.io/install.html">streamlink</a> allows streaming Twitch directly in VLC by running a command of the form</p>
+<pre tabindex="0"><code>streamlink https://www.twitch.tv/gamesdonequick 720p
+</code></pre><p>I hope you enjoyed! See you in the next post.</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -74,6 +474,40 @@ However, a while back and after some specific changes in the Python code, we sta
       
       <guid>https://joaopmatias.github.io/posts/2020-06-01-r-environments/</guid>
       <description>Did you ever ask yourself what would happen if you tweaked some functions in an R package? Recently, I found myself in a situation where I would like to perform and test some changes to an R package and started looking for ways to easily and clearly register some findings. This pursuit eventually led me to learn more about R environment, after all, whenever you install a package in your system you also add a number of environments associated with that package.</description>
+      <content:encoded><![CDATA[<p>Did you ever ask yourself what would happen if you tweaked some functions in an R package? Recently, I found myself in a situation where I would like to perform and test some changes to an R package and started looking for ways to easily and clearly register some findings. This pursuit eventually led me to learn more about R environment, after all, whenever you install a package in your system you also add a number of environments associated with that package.</p>
+<p>Let me add that one advantage of working with R packages is that most source code (if not all!) is available somewhere and may be dissected by the user, so one can easily download whatever package they want, apply the desired changes, load the package and test the changes. However, this may be a bit cumbersome since you need all the source of the package (not just the functions you wish to alter), it may not be easy to track all the changes you are doing in different files (although <code>git</code> may provide a huge help) and tracking and sharing the results of different sets of changes may also be difficult (for example, I like to share my results as <code>rmarkdown</code> notebook).</p>
+<p>As usual, check the R documentation on the subject and, in particular, the following functions:</p>
+<ul>
+<li><code>search</code></li>
+<li><code>environment</code></li>
+<li><code>attach</code></li>
+<li><code>detach</code></li>
+<li><code>new.env</code></li>
+<li><code>$</code> operator</li>
+<li><code>list2env</code></li>
+</ul>
+<p>Let me show one example below</p>
+<pre tabindex="0"><code>my.env &lt;- new.env()
+list2env(lapply(as.list(asNamespace(&#34;testthat&#34;)),
+                function(fcn) {
+                    environment(fcn) &lt;- my.env
+                    fcn
+                }),
+         my.env)
+</code></pre><p>The above code generates a new environment containing all the functions in the package <code>testthat</code>. The expression <code>environment(fcn) &lt;- my.env</code> here guarantees that the copies of the functions are attached to the environment <code>my.env</code> that they are found whenever called from inside other functions. Then, we may modify the function <code>test_file</code>, for example.</p>
+<pre tabindex="0"><code>my.env$test_file &lt;- function(...) print(&#34;Test yourself!&#34;)
+environment(my.env$test_file) &lt;- my.env
+</code></pre><p>After executing the following command in a file of your choosing a number of times, you may see a familiar quote from this post.</p>
+<pre tabindex="0"><code>my.env$test_package(&#34;path-to-package&#34;)
+</code></pre><p><strong>Disclaimer</strong></p>
+<p>This approach may not work with all packages. In particular, if they use features of R packages other than traditional functions.</p>
+<h3 id="references">References</h3>
+<ul>
+<li><a href="https://adv-r.hadley.nz/environments.html">Advance R</a></li>
+<li><a href="https://stackoverflow.com/questions/9965577/r-copy-move-one-environment-to-another#9966441">Stackoverflow</a></li>
+</ul>
+<p>Thank you for reading and do not hesitate to share your comments!</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -84,6 +518,53 @@ However, a while back and after some specific changes in the Python code, we sta
       <guid>https://joaopmatias.github.io/posts/2020-03-22-r-packages/</guid>
       <description>I would like to use this opportunity to write about some useful patterns to organize your R code. These may be well know to advanced R users, but are left out of most tutorials. So, sit back, relax, and enjoy some useful simple tips for R!
 1. Loading R packages The most famous way of loading packages in R is through the library() command. One disadvantage of this option is the fact that an error is thrown if the package is not found in the R environment.</description>
+      <content:encoded><![CDATA[<p>I would like to use this opportunity to write about some useful patterns to organize your R code. These may be well know to advanced R users, but are left out of most tutorials. So, sit back, relax, and enjoy some useful simple tips for R!</p>
+<h3 id="1-loading-r-packages">1. Loading R packages</h3>
+<p>The most famous way of loading packages in R is through the <code>library()</code> command. One disadvantage of this option is the fact that an error is thrown if the package is not found in the R environment. An alternative function is <code>require()</code> which just throws a warning message and returns <code>FALSE</code> if the package is not found, or loads the package and returns <code>TRUE</code> if it is found.</p>
+<p>In the case that you want to see all packages in your system, you can use <code>installed.packages()</code>, or a command similar to <code>&quot;testthat&quot; %in% installed.packages()</code> to check for a specific package (in this case, <code>testthat</code>).</p>
+<h3 id="2-basic-folder-structure">2. Basic folder structure</h3>
+<p>The contents of an R package are usually included in a structured folder containing R files along with documentation and other binaries. The simplest structure of a working R package should be similar to the following.</p>
+<pre tabindex="0"><code>├── DESCRIPTION
+├── NAMESPACE
+└── R
+    ├── file1.R
+    └── file2.R
+</code></pre><p><code>DESCRIPTION</code> is a file containing metadata of the package. It requires, at least, two fields: the name of the package and the version. <code>NAMESPACE</code> is a file generated automatically by <code>roxygen2</code> and should not be edited by hand. That being said, the following mock should work with any package to export all functions defined in the R folder.</p>
+<pre tabindex="0"><code># Generated by roxygen2: fake comment so roxygen2 overwrites silently.
+exportPattern(&#34;^[^\\.]&#34;)
+</code></pre><p>Lastly, <code>R</code> is the folder containing the files with all R definition and variables.</p>
+<h3 id="3-accessing-exported-variables-in-a-namespace">3. Accessing exported variables in a namespace</h3>
+<p>Loading a whole package can take a while, not to mention that it may override variables in memory having the same names as some objects defined in the package. So, if want to use just one function in a package, you can use the double colon operator, <code>::</code>. For example, in order to use the function <code>test_file()</code> from the package <code>testthat</code> one can simply type <code>testthat::test_file()</code>.</p>
+<h3 id="4-accessing-internal-variables-in-a-namespace">4. Accessing internal variables in a namespace</h3>
+<p>The triple colon operator, <code>:::</code>, is, simply put, <code>::</code> on steroids! This operator allows you to use variables defined in a package that are not exported to the user environment.</p>
+<p>As an example, run the command <code>testthat:::praise()</code> and you will find a pleasant surprise!</p>
+<h3 id="5-devtools-is-out-there-use-it">5. devtools is out there! Use it!</h3>
+<p>Installing the <code>devtools</code> package on your R environment is often not straight forward due to its many dependencies and C binaries, but it will make developing R packages much easier. So, be patient through the extra debugging required - It will pay off in the future!</p>
+<p>Some of the most useful functions to develop R packages are: <code>document()</code>, <code>install()</code>, <code>load_all()</code> and <code>test()</code>.</p>
+<ul>
+<li>
+<p><code>document()</code>: generates all documentation including man pages, using the comments starting with <code>#'</code>, and the <code>NAMESPACE</code> file. When <code>NAMESPACE</code> is rewritten, only the definitions marked with <code>@export</code> are exported every time that the package is loaded.</p>
+</li>
+<li>
+<p><code>install()</code>: installs the R package corresponding to the working directory or to the path provided, in the local R environment.</p>
+</li>
+<li>
+<p><code>load_all()</code>: loads all functions and variables defined in the R package corresponding to the working directory or to the path provided, without requiring installation. This is specially useful in combination with RStudio to create breakpoints and inspect the behavior of the functions written.</p>
+</li>
+<li>
+<p><code>test()</code>: automatically runs all the unit tests, located in <code>tests</code>, in the R package.</p>
+</li>
+</ul>
+<h3 id="references">References</h3>
+<p>All these ideas were gathered while exploring the help pages or source code of some R packages. The following pages have been specially helpful to me.</p>
+<ul>
+<li><a href="https://r-pkgs.org/">R Packages</a></li>
+<li><a href="https://www.rdocumentation.org/">R documentation</a></li>
+<li><a href="https://github.com/r-lib/testthat">testthat repository</a></li>
+</ul>
+<h3 id="conclusion">Conclusion</h3>
+<p>I hope you find this post useful and do not forget to share your favorite R tricks, too!</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -94,6 +575,68 @@ However, a while back and after some specific changes in the Python code, we sta
       <guid>https://joaopmatias.github.io/posts/2020-02-22-r-functions-you-need/</guid>
       <description>In this post, I will mention a few R functions that are very useful to manipulate other functions or objects. If you are not acquainted with them, I hope that they open a whole world of possibilities in the R code you develop, as they did for me.
 1. Ellipsis Ellipsis (...) may be placed in the definition of a function to substitute multiple values that are given as arguments to that function and are not captured by other argument variables.</description>
+      <content:encoded><![CDATA[<p>In this post, I will mention a few R functions that are very useful to manipulate other functions or objects. If you are not acquainted with them, I hope that they open a whole world of possibilities in the R code you develop, as they did for me.</p>
+<h3 id="1-ellipsis">1. Ellipsis</h3>
+<p>Ellipsis (<code>...</code>) may be placed in the definition of a function to substitute multiple values that are given as arguments to that function and are not captured by other argument variables.</p>
+<p>The expression <code>...</code> may then be used in the body of the function in lieu of writing the values that is substituting.</p>
+<p>As an example take the following function that returns the sum of the arguments other than <code>a</code>.</p>
+<pre tabindex="0"><code>&gt; sum_rest &lt;- function(a, ...) return(sum(...))
+&gt; sum_rest(1, 2, 3)
+[1] 5
+&gt; sum_rest(1, a = 2, 3)
+[1] 4
+</code></pre><p>Note that in the first calculation the value returned is <code>sum(2, 3)</code> whereas the value in the second calculation is <code>sum(1, 3)</code> since the second argument is declared as a keyword argument that matches the first variable.</p>
+<h3 id="2-docall">2. do.call</h3>
+<p><code>do.call</code> executes a function using the values in a given list as arguments. Furthermore, in the case that the list used is a named list, each element in the list is matched with a keyword arguments according to its key (or name).</p>
+<p>This function is specially useful to execute a function with an unknown number of arguments.</p>
+<p>In the following example, the value of one of the arguments is returned.</p>
+<pre tabindex="0"><code>&gt; return_a &lt;- function(a, b, c) return(a)
+&gt; do.call(return_a, list(1, 2, 3))
+[1] 1
+&gt; do.call(return_a, list(&#34;b&#34; = 1, &#34;a&#34; = 2, &#34;c&#34; = 3))
+[1] 2
+</code></pre><p>Finally, if the function uses ellipsis in its definition, then the list provided may have more values than the number of arguments of the function.</p>
+<pre tabindex="0"><code>&gt; return_a &lt;- function(a, b, c, ...) return(a)
+&gt; do.call(return_a, list(1, 2, 3, 4, 5))
+[1] 1
+</code></pre><h3 id="3-formals">3. formals</h3>
+<p><code>formals</code> allows to manipulate the keyword arguments of a function. It takes as argument a function and returns a named list with each key (or name) matching one of the arguments of the function and the corresponding value matching the default value of that argument. Changing the object returned by <code>formals</code> also affects the keyword arguments, their default values or the order of the keyword arguments.</p>
+<p>Let us look at an example where the argument variable of a function is changed.</p>
+<pre tabindex="0"><code>&gt; dummy &lt;- function(x = 0) return(0)
+&gt; formals(dummy)
+$x
+[1] 0
+&gt; formals(dummy) &lt;- list(&#34;y&#34; = 0)
+&gt; dummy
+function(y = 0)
+return(0)
+</code></pre><p>In the example above, the change does not affect the values returned by the function, but that may not be the case if the result depends on positional arguments.</p>
+<pre tabindex="0"><code>&gt; dummy &lt;- function(x = 0, y = 0) return(x)
+&gt; dummy(1, 2)
+[1] 1
+&gt; formals(dummy) &lt;- list(&#34;y&#34; = 0, &#34;x&#34; = 0)
+&gt; dummy
+function(y = 0, x = 0)
+return(x)
+&gt; dummy(1, 2)
+[1] 2
+</code></pre><p>In combination with <code>bquote()</code> we may also remove the default values, by creating a list with elements that have a key and no values.</p>
+<pre tabindex="0"><code>&gt; dummy &lt;- function(x = 0, y = 0) return(x)
+&gt; formals(dummy) &lt;- list(&#34;y&#34; = bquote(), &#34;x&#34; = bquote(), &#34;...&#34; = bquote())
+&gt; dummy
+function(y, x, ...)
+return(x)
+</code></pre><h3 id="4-get">4. get</h3>
+<p>Finally, an alternative way to evaluate a variable is using the <code>get</code> function.</p>
+<pre tabindex="0"><code>&gt; x &lt;- 1
+&gt; get(&#34;x&#34;)
+[1] 1
+&gt; string &lt;- &#34;x&#34;
+&gt; get(string)
+[1] 1
+</code></pre><h3 id="conclusion">Conclusion</h3>
+<p>I hope you find this post useful and share your favorite tricks of the R language, too!</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -105,6 +648,11 @@ However, a while back and after some specific changes in the Python code, we sta
       <description>Cheers I will start using this website to share some ideas that I&amp;rsquo;m interested in.
 Initially, I&amp;rsquo;ll be focusing on the tools that I&amp;rsquo;ve been using to perform data analysis and program, in general.
 I look forward to your comments.</description>
+      <content:encoded><![CDATA[<h1 id="cheers">Cheers</h1>
+<p>I will start using this website to share some ideas that I&rsquo;m interested in.</p>
+<p>Initially, I&rsquo;ll be focusing on the tools that I&rsquo;ve been using to perform data analysis and program, in general.</p>
+<p>I look forward to your comments.</p>
+]]></content:encoded>
     </item>
     
   </channel>
