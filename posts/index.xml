@@ -388,14 +388,14 @@ $ jep
       
       <guid>https://joaopmatias.github.io/posts/2021-02-06-zsh_part_1/</guid>
       <description>As a programmer, the command line terminal is one of the most important tools I use. By default, the appearance of this application is very plain, but there are ways to customize its looks and functionality. So, I&amp;rsquo;d like to share some of my favorite tools that can improve the experience while using it. In particular, I&amp;rsquo;m a big fan of zinit and powerlevel10k. You can also see my shell configuration in my dotfiles.</description>
-      <content:encoded><![CDATA[<p>As a programmer, the command line terminal is one of the most important tools I use. By default, the appearance of this application is very plain, but there are ways to customize its looks and functionality. So, I&rsquo;d like to share some of my favorite tools that can improve the experience while using it. In particular, I&rsquo;m a big fan of <a href="https://github.com/zdharma/zinit">zinit</a> and <a href="https://github.com/romkatv/powerlevel10k">powerlevel10k</a>. You can also see my shell configuration in my <a href="https://github.com/joaopmatias/dotfiles">dotfiles</a>.</p>
+      <content:encoded><![CDATA[<p>As a programmer, the command line terminal is one of the most important tools I use. By default, the appearance of this application is very plain, but there are ways to customize its looks and functionality. So, I&rsquo;d like to share some of my favorite tools that can improve the experience while using it. In particular, I&rsquo;m a big fan of <a href="https://github.com/zdharma-continuum/zinit">zinit</a> and <a href="https://github.com/romkatv/powerlevel10k">powerlevel10k</a>. You can also see my shell configuration in my <a href="https://github.com/joaopmatias/dotfiles">dotfiles</a>.</p>
 <p>I switched to zsh (pronounced z-shell) a while back when it became the default in macOS Catalina (replacing bash). It offers some additional features and can be easily customized using frameworks like <a href="https://github.com/ohmyzsh/ohmyzsh">oh-my-zsh</a> or <a href="https://github.com/sorin-ionescu/prezto">prezto</a>. Despite the convenience, these frameworks add a lot of bloat to the shell configuration of which most people only use part, so I kept searching for more minimal tools that achieve similar results.</p>
 <p>If you like to have an idea of the final result, here is a video recorded using <a href="https://asciinema.org/">asciinema</a>.</p>
-<p><a href="https://asciinema.org/a/3WvHWrMqBNY5PU3DiaFwBAGwh">
-  <img loading="lazy" src="https://asciinema.org/a/3WvHWrMqBNY5PU3DiaFwBAGwh.svg" alt="asciicast"  /></a></p>
-<p>One of those tools is <a href="https://github.com/zdharma/zinit">zinit</a>!</p>
+<p><a href="https://asciinema.org/a/mZiMfwfahA16cmRwbbKEZsFdW">
+  <img loading="lazy" src="https://asciinema.org/a/mZiMfwfahA16cmRwbbKEZsFdW.svg" alt="asciicast"  /></a></p>
+<p>One of those tools is <a href="https://github.com/zdharma-continuum/zinit">zinit</a>!</p>
 <h1 id="zinit">zinit</h1>
-<p><a href="https://github.com/zdharma/zinit">zinit</a> is a project that provides the option to combine shell configuration scripts from multiple sources (including plugins from <code>oh-my-zsh</code> and <code>prezto</code>!). Furthermore, it gives some control over the timing in which each script is loaded, including after displaying the shell prompt, thus reducing the startup time. The main setback is its learning curve that can be countered by the extensive documentation and examples available.</p>
+<p><a href="https://github.com/zdharma-continuum/zinit">zinit</a> is a project that provides the option to combine shell configuration scripts from multiple sources (including plugins from <code>oh-my-zsh</code> and <code>prezto</code>!). Furthermore, it gives some control over the timing in which each script is loaded, including after displaying the shell prompt, thus reducing the startup time. The main setback is its learning curve that can be countered by the extensive documentation and examples available.</p>
 <p>After installing zinit, the configuration scripts can be taken from github repositories (or gitlab, or bitbucket for that matter) by adding a command like the following in <code>.zshrc</code></p>
 <pre tabindex="0"><code>zinit light-mode OMZL::history.zsh
 </code></pre><p>The purpose of the command in the example is setting some aliases and environment variables that manage the history of the terminal shell. More concretely, it runs the script <code>history.zsh</code> in the <code>lib</code> folder of the <code>oh-my-zsh</code> github repository since, in zinit, <code>OMZL</code> can be used as an abbreviation for that location. The modifier <code>light-mode</code> disables some reporting and tracking functionalities used to debug the script and that usually are not needed.</p>
@@ -408,28 +408,26 @@ $ jep
 <h1 id="more-plugins">More plugins!</h1>
 <p>I use a few other plugins that are loaded by the following command in <code>.zshrc</code>.</p>
 <pre tabindex="0"><code>zinit wait lucid light-mode depth=1 for \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node \
 	atinit&#34;zicompinit; zicdreplay&#34; \
-		zdharma/fast-syntax-highlighting \
-	zdharma/history-search-multi-word \
+		zdharma-continuum/fast-syntax-highlighting \
+	zdharma-continuum/history-search-multi-word \
 	atload&#34;bindkey &#39;^[[A&#39; history-substring-search-up; \
 			bindkey &#39;^[[B&#39; history-substring-search-down&#34; \
 		zsh-users/zsh-history-substring-search
-</code></pre><p>There are a few modifiers that make the plugins work flawlessly and that you may read about in the <a href="https://zdharma.org/zinit/wiki/">zinit wiki</a>. The most relevant is <code>wait</code>, which enables the turbo-mode. This option makes the shell wait for the prompt to be displayed before loading the associated plugins.</p>
-<p>The last two plugins listed in the command help navigating through entries in the commands history. <a href="https://github.com/zsh-users/zsh-history-substring-search">zsh-users/zsh-history-substring-search</a> allows the users to scroll, using the up and down arrows, through the entries of the history that contain some given subtstrings. <a href="https://github.com/zdharma/history-search-multi-word">zdharma/history-search-multi-word</a> performs a similar action by pressing <code>Control+R</code>, but has a slightly different interface.</p>
-<p>zdharma, the group that maintains zinit, also maintains some impressive plugins that can replace older and slower plugins that have been shared for years on the internet. One example is <a href="https://github.com/zdharma/fast-syntax-highlighting">Fast Syntax Highlighting</a>. This plugin highlights the shell commands to improve their appearance and readability. It does so very quickly and shows a significant difference in speed when compared to other options like <a href="https://github.com/zsh-users/zsh-syntax-highlighting">zsh-syntax-highlighting</a> (check the video below).</p>
+</code></pre><p>There are a few modifiers that make the plugins work flawlessly and that you may read about in the [zinit wiki](<a href="https://zdharma-continuum.github.io/zinit/wiki/">https://zdharma-continuum.github.io/zinit/wiki/</a>. The most relevant is <code>wait</code>, which enables the turbo-mode. This option makes the shell wait for the prompt to be displayed before loading the associated plugins.</p>
+<p>The last two plugins listed in the command help navigating through entries in the commands history. <a href="https://github.com/zsh-users/zsh-history-substring-search">zsh-users/zsh-history-substring-search</a> allows the users to scroll, using the up and down arrows, through the entries of the history that contain some given subtstrings. <a href="https://github.com/zdharma-continuum/history-search-multi-word">zdharma-continuum/history-search-multi-word</a> performs a similar action by pressing <code>Control+R</code>, but has a slightly different interface.</p>
+<p>zdharma-continuum, the group that maintains zinit, also maintains some impressive plugins that can replace older and slower plugins that have been shared for years on the internet. One example is <a href="https://github.com/zdharma-continuum/fast-syntax-highlighting">Fast Syntax Highlighting</a>. This plugin highlights the shell commands to improve their appearance and readability. It does so very quickly and shows a significant difference in speed when compared to other options like <a href="https://github.com/zsh-users/zsh-syntax-highlighting">zsh-syntax-highlighting</a> (check the video below).</p>
 <p><a href="https://asciinema.org/a/112367">
   <img loading="lazy" src="https://asciinema.org/a/112367.svg" alt="asciicast"  /></a>
-(source: <a href="https://github.com/zdharma/fast-syntax-highlighting#performance">fast-syntax-highlighting performance</a>)</p>
+(source: <a href="https://github.com/zdharma-continuum/fast-syntax-highlighting#performance">fast-syntax-highlighting performance</a>)</p>
 <h1 id="powerlevel10k">powerlevel10k</h1>
 <p><code>powerlevel10k</code> is a theme based on vim&rsquo;s <code>powerline</code> so its look does not disappoint. It stands out from other similar looking themes due to its responsiveness. On my daily use, I&rsquo;ve never noticed it lagging, even when pressing the return key repeatedly. Furthermore, it has the option to load instantly uppon openning a new terminal session by adding the following in <code>.zshrc</code></p>
 <pre tabindex="0"><code>if [[ -r &#34;${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh&#34; ]]; then
   source &#34;${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh&#34;
 fi
 </code></pre><p>It is also very easy to configure and provides plently of options to tweak. Just use the command <code>p10k configure</code> (example below) to run the wizard. After configuring the theme, the settings are saved in the file <code>.p10k.zsh</code> which can be edited separately, too (at the user&rsquo;s risk, though). For example, one can place the time in the left side of the shell by changing the property <code>POWERLEVEL9K_LEFT_PROMPT_ELEMENTS</code>, among other options.</p>
-<p><a href="https://asciinema.org/a/fUvbm1lbFXZ6bOM4uhAjfqpOo">
-  <img loading="lazy" src="https://asciinema.org/a/fUvbm1lbFXZ6bOM4uhAjfqpOo.svg" alt="asciicast"  /></a></p>
+<p><a href="https://asciinema.org/a/R7g34OLXPel0emZqTfm3G3ufc">
+  <img loading="lazy" src="https://asciinema.org/a/R7g34OLXPel0emZqTfm3G3ufc.svg" alt="asciicast"  /></a></p>
 <p>I hope you enjoyed these tips and learned something new! Feel free to reach out if you have comments.</p>
 ]]></content:encoded>
     </item>
