@@ -6,7 +6,211 @@
     <description>Recent content in Posts on João Matias</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 02 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://joaopmatias.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 18 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://joaopmatias.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Logs: Finding Structure in the Chaos</title>
+      <link>https://joaopmatias.github.io/posts/2023-07-18-log-parsing/</link>
+      <pubDate>Tue, 18 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://joaopmatias.github.io/posts/2023-07-18-log-parsing/</guid>
+      <description>Did you ever get overwhelmed trying to understand all different log message of an application? In this post I&amp;rsquo;d like to share how to analyze application logs combining different open source projects to produce an appealing dashboard summarizing all information.
+We will use a github repository with a collection of algorithms to parse logs, logparser, plotly to create interactive plots, and pandas to transform data.
+For starters, we will by briefly explain the dependencies and datasets used, and later we show how to obtain a dashboard like the following.</description>
+      <content:encoded><![CDATA[<p>Did you ever get overwhelmed trying to understand all different log message of an application? In this post I&rsquo;d like to share how to analyze application logs combining different open source projects to produce an appealing dashboard summarizing all information.</p>
+<p>We will use a github repository with a collection of algorithms to parse logs, <a href="https://github.com/logpai/logparser">logparser</a>, <em>plotly</em> to create interactive plots, and <em>pandas</em> to transform data.</p>
+<p>For starters, we will by briefly explain the dependencies and datasets used, and later we show how to obtain a dashboard like the following.</p>
+<p><img loading="lazy" src="/images/blog/logs_histogram.png" type="" alt="Plot Results"  /></p>
+<p>Let us get started!</p>
+<h2 id="dependencies">Dependencies</h2>
+<h3 id="logparser">Logparser</h3>
+<p>The first and main dependency is the repository <a href="https://github.com/logpai/logparser">logparser</a> which consists of a collection of algorithms to parse logs. Furthermore, the repository includes articles explaining each algorithm to great extent.</p>
+<p>One of the algorithm that works quite well is <em>Spell</em> and we will use it throughout the post. <em>Spell</em> works well in most scenarios since it is fast, requires no pre-defined log templates or regular expressions, and parses logs in an online streaming fashion, so it is able to start parsing logs immediately.</p>
+<p>The accuracy of <em>Spell</em> is also supported by multiple benchmarks collected in <a href="https://github.com/logpai/logparser">logparser</a> and its performance is often one of the best amongst the options tested.</p>
+<p>This algorithm processes a stream of logs by associating each incoming log to the element from a growing list of log templates that shares the <em>longest common subsequence</em> with it. If the incoming log is very different from the current log templates, then a new log template is added to the list. The parameter tau can also be tweaked to manage the number of log templates.</p>
+<p><strong>Remark:</strong> In this blog we added some <a href="https://github.com/joaopmatias/logparser/">small modifications</a> to the code provided in the logparser repository since that was developed with Windows machines in mind and it behaves slightly differently in our machines that run macOS.</p>
+<h4 id="example">Example</h4>
+<p>As a short example, we can see what happens as the following logs are processed using the Spell algorithm.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>The ducks waddled in the park.
+</span></span><span style="display:flex;"><span>The ducks walkded in the park.
+</span></span><span style="display:flex;"><span>The ducks flew in the air.
+</span></span><span style="display:flex;"><span>The cat chased birds in the Spark.
+</span></span></code></pre></div><p>After the first two lines are read, they are associated with the same log template as shown below. Note that the positions where the log lines differ are omited from the log template and the corresponding tokens are considered parameters.</p>
+<table>
+<thead>
+<tr>
+<th>Log Template</th>
+<th>Parameter List</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The ducks &lt;*&gt; in the park.</td>
+<td>[&lsquo;waddled&rsquo;]</td>
+</tr>
+<tr>
+<td>The ducks &lt;*&gt; in the park.</td>
+<td>[&lsquo;walkded&rsquo;]</td>
+</tr>
+</tbody>
+</table>
+<p>Then, we note that the third line still has a significant substring in common with the previous log template, so it is grouped with the previous log messages. Finally, the last line does have a substring longer than half of its length in common with the log template, so it originates a new log template.</p>
+<table>
+<thead>
+<tr>
+<th>Log Template</th>
+<th>Parameter List</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The ducks &lt;*&gt; in the &lt;*&gt;.</td>
+<td>[&lsquo;waddled&rsquo;, park]</td>
+</tr>
+<tr>
+<td>The ducks &lt;*&gt; in the &lt;*&gt;.</td>
+<td>[&lsquo;walkded&rsquo;, park]</td>
+</tr>
+<tr>
+<td>The ducks &lt;*&gt; in the &lt;*&gt;.</td>
+<td>[&lsquo;flew&rsquo;   , air]</td>
+</tr>
+<tr>
+<td>The cat chased birds in the park.</td>
+<td>[]</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cray-data">Cray Data</h3>
+<p>We use log data shared by <a href="https://www.usenix.org/cfdr-data">usenix</a>, specifically the <a href="https://www.usenix.org/sites/default/files/4366-0809181018.tar.gz">log dataset</a> corresponding to Cray Supercomputer. This file has close to 250K log lines.</p>
+<p>Here is a sample of the logs.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>[Tue Sep  9 20:18:34 2008]:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Boot Node Daemon starting at Tue Sep  9 20:18:34 2008.
+</span></span><span style="display:flex;"><span>[Tue Sep  9 20:18:34 2008]:Connecting to SMW &#39;10.3.1.1&#39;
+</span></span><span style="display:flex;"><span>[Tue Sep  9 20:18:34 2008]:done
+</span></span><span style="display:flex;"><span>[Tue Sep  9 20:18:34 2008]:topo class is RS_TOPO_CLASS_1
+</span></span><span style="display:flex;"><span>[Tue Sep  9 20:18:38 2008]:Event:Tue Sep  9 20:18:40 2008|ec_hsn_load_req Transfer a kernel image over HSN to a node|src:1b:3:s0||svc: svid=:9:s0:9:s0 nid=c0-0c0s0n3  bparams=&#39;&#39; kpath=&#39;/tmp/boot/kernel.cpio.2.1.31HD-13426&#39; flags=0x3
+</span></span><span style="display:flex;"><span>[Tue Sep  9 20:18:38 2008]:
+</span></span><span style="display:flex;"><span>***** HSN Booting 1 nodes at Tue Sep  9 20:18:38 2008
+</span></span><span style="display:flex;"><span>[Tue Sep  9 20:18:38 2008]:number of interfaces is 8
+</span></span><span style="display:flex;"><span>[Tue Sep  9 20:18:38 2008]:initialized portals event queue
+</span></span><span style="display:flex;"><span>[Tue Sep  9 20:18:41 2008]:loading index-file /tmp/boot_9lDixW/SNL0.load
+</span></span><span style="display:flex;"><span>[Tue Sep  9 20:18:41 2008]:Set comp mdh[0] to 0x0
+</span></span><span style="display:flex;"><span>[Tue Sep  9 20:18:41 2008]:Corresponding md is the following:
+</span></span><span style="display:flex;"><span>[Tue Sep  9 20:18:41 2008]:start  is 0x2b20e175b010
+</span></span></code></pre></div><p>As you can see, each log line start with a timestamp and is followed by a message.</p>
+<h2 id="dashboard">Dashboard</h2>
+<p>Putting together all the pieces mentioned above we can obtain the following dashboard. You can also produce the same plot using <a href="https://github.com/joaopmatias/website-source/tree/master/blog_notebooks/2023-07-18-log-parsing">this notebook</a>.</p>
+<p><img loading="lazy" src="/images/blog/logs_histogram.png" type="" alt="Plot Results"  /></p>
+<p>Aside from grouping similar logs, we can also see their timestamps and infer whether the log messages were sporadic or recurrent.</p>
+<h3 id="parsing-logs">Parsing logs</h3>
+<p>After downloading the logs files, the following code snippet injests the log messages and producces two CSV files, one listing all the log templates and another listing all log messages with their corresponding log templates and parameters.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> logparser.Spell <span style="color:#f92672">import</span> Spell
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>t <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;data/0809181018&#34;</span>
+</span></span><span style="display:flex;"><span>parser <span style="color:#f92672">=</span> Spell<span style="color:#f92672">.</span>LogParser(log_format<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;\[&lt;Timestamp&gt;\]:&lt;Content&gt;&#34;</span>, indir<span style="color:#f92672">=</span>t, outdir<span style="color:#f92672">=</span>t, tau<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+</span></span><span style="display:flex;"><span>parser<span style="color:#f92672">.</span>parse(<span style="color:#e6db74">&#34;bnd.log&#34;</span>)
+</span></span></code></pre></div><p>As an example, here is part of the output file that includes the log messages.</p>
+<table>
+<thead>
+<tr>
+<th>LineId</th>
+<th>Timestamp</th>
+<th>Content</th>
+<th>EventId</th>
+<th>EventTemplate</th>
+<th>ParameterList</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11</td>
+<td>Tue Sep  9 20:18:41 2008</td>
+<td>Corresponding md is the following:</td>
+<td>1cbf7853</td>
+<td>Corresponding md is the following</td>
+<td>[]</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Tue Sep  9 20:18:41 2008</td>
+<td>start  is 0x2b20e175b010</td>
+<td>365695dc</td>
+<td>start is &lt;*&gt;</td>
+<td>[&lsquo;0x2b20e175b010&rsquo;]</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Tue Sep  9 20:18:41 2008</td>
+<td>length is 0x3ffb28</td>
+<td>f3cb5b83</td>
+<td>length is &lt;*&gt;</td>
+<td>[&lsquo;0x3ffb28&rsquo;]</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Tue Sep  9 20:18:41 2008</td>
+<td>user_ptr is 0x3e9</td>
+<td>7d7147f1</td>
+<td>user_ptr is &lt;*&gt;</td>
+<td>[&lsquo;0x3e9&rsquo;]</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Tue Sep  9 20:18:41 2008</td>
+<td>Set comp mdh[1] to 0x1</td>
+<td>2bab36e2</td>
+<td>Set comp &lt;<em>&gt; to &lt;</em>&gt;</td>
+<td>&ldquo;[&lsquo;mdh[1]&rsquo;, &lsquo;0x1&rsquo;]&rdquo;</td>
+</tr>
+</tbody>
+</table>
+<h3 id="timestamps">Timestamps</h3>
+<p>In order to convert the Timestamp column into an actual time we use regular expressions to extract the year, month, day and time from the the existing field.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> calendar <span style="color:#f92672">import</span> math_abbr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>df<span style="color:#f92672">.</span>assign(
+</span></span><span style="display:flex;"><span>    Timestamp<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x0:
+</span></span><span style="display:flex;"><span>    x0[<span style="color:#e6db74">&#34;Timestamp&#34;</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>extract(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#34;\S+\s+(?P&lt;m&gt;\S+)\s+(?P&lt;d&gt;\S+)\s+(?P&lt;t&gt;\S+)\s+(?P&lt;y&gt;\S+)&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">.</span>replace(dict(zip(month_abbr, range(<span style="color:#ae81ff">13</span>))))
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">.</span>assign(m<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x: x[<span style="color:#e6db74">&#34;m&#34;</span>]<span style="color:#f92672">.</span>astype(str)<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>rjust(<span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#34;0&#34;</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">.</span>assign(d<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x: x[<span style="color:#e6db74">&#34;d&#34;</span>]<span style="color:#f92672">.</span>astype(str)<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>rjust(<span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#34;0&#34;</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">.</span>pipe(<span style="color:#66d9ef">lambda</span> x: pd<span style="color:#f92672">.</span>to_datetime(x[<span style="color:#e6db74">&#34;y&#34;</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;-&#34;</span> <span style="color:#f92672">+</span> x[<span style="color:#e6db74">&#34;m&#34;</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;-&#34;</span> <span style="color:#f92672">+</span> x[<span style="color:#e6db74">&#34;d&#34;</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; &#34;</span> <span style="color:#f92672">+</span> x[<span style="color:#e6db74">&#34;t&#34;</span>])))
+</span></span></code></pre></div><h3 id="plot-result">Plot Result</h3>
+<p>We use the plotly.express module to concisely create the histogram with the different log templates. Note that we plot time in the x-axis, and we position the legend below the graph, instead of next to it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> plotly.express <span style="color:#66d9ef">as</span> px
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(next(Path(t)<span style="color:#f92672">.</span>glob(<span style="color:#e6db74">&#34;*_structured.csv&#34;</span>)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    px<span style="color:#f92672">.</span>histogram(
+</span></span><span style="display:flex;"><span>        df
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.</span>assign(
+</span></span><span style="display:flex;"><span>            Timestamp<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x0:
+</span></span><span style="display:flex;"><span>            x0[<span style="color:#e6db74">&#34;Timestamp&#34;</span>]
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>extract(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#34;\S+\s+(?P&lt;m&gt;\S+)\s+(?P&lt;d&gt;\S+)\s+(?P&lt;t&gt;\S+)\s+(?P&lt;y&gt;\S+)&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">.</span>replace(dict(zip(month_abbr, range(<span style="color:#ae81ff">13</span>))))
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">.</span>assign(m<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x: x[<span style="color:#e6db74">&#34;m&#34;</span>]<span style="color:#f92672">.</span>astype(str)<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>rjust(<span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#34;0&#34;</span>))
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">.</span>assign(d<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x: x[<span style="color:#e6db74">&#34;d&#34;</span>]<span style="color:#f92672">.</span>astype(str)<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>rjust(<span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#34;0&#34;</span>))
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">.</span>pipe(<span style="color:#66d9ef">lambda</span> x: pd<span style="color:#f92672">.</span>to_datetime(x[<span style="color:#e6db74">&#34;y&#34;</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;-&#34;</span> <span style="color:#f92672">+</span> x[<span style="color:#e6db74">&#34;m&#34;</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;-&#34;</span> <span style="color:#f92672">+</span> x[<span style="color:#e6db74">&#34;d&#34;</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; &#34;</span> <span style="color:#f92672">+</span> x[<span style="color:#e6db74">&#34;t&#34;</span>])))
+</span></span><span style="display:flex;"><span>        [[<span style="color:#e6db74">&#34;Timestamp&#34;</span>, <span style="color:#e6db74">&#34;EventTemplate&#34;</span>]],
+</span></span><span style="display:flex;"><span>        x<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Timestamp&#34;</span>,
+</span></span><span style="display:flex;"><span>        color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;EventTemplate&#34;</span>,
+</span></span><span style="display:flex;"><span>        nbins<span style="color:#f92672">=</span><span style="color:#ae81ff">288</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">.</span>update_layout(height<span style="color:#f92672">=</span><span style="color:#ae81ff">500</span>, legend<span style="color:#f92672">=</span>dict(y<span style="color:#f92672">=-</span><span style="color:#ae81ff">0.5</span>, orientation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;h&#34;</span>), title<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;logs&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">.</span>show()
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>Once again, here is the final result.</p>
+<p><img loading="lazy" src="/images/blog/logs_histogram.png" type="" alt="Plot Results"  /></p>
+<p>Again, the dashboard can be produced using <a href="https://github.com/joaopmatias/website-source/tree/master/blog_notebooks/2023-07-18-log-parsing">this notebook</a>.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Throughout this post we describe some basic building blocks to produce insights from log messages.</p>
+<p>I hope you enjoyed it!</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>Quick Setup for Git Credentials and Signed Commits</title>
       <link>https://joaopmatias.github.io/posts/2023-06-02-git-sign/</link>

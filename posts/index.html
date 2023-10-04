@@ -10,7 +10,7 @@
 <meta name="description" content="Posts - João Matias">
 <meta name="author" content="">
 <link rel="canonical" href="https://joaopmatias.github.io/posts/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.min.a5e3dcb64d6212302ffb85978439a29faf0c80fa9284151fbc33898c77586e9f.css" integrity="sha256-pePctk1iEjAv&#43;4WXhDmin68MgPqShBUfvDOJjHdYbp8=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.b29c033c94e643d6c1e264ba90dc4760cb51e4fde2d4da154293b9c96e124ef9.css" integrity="sha256-spwDPJTmQ9bB4mS6kNxHYMtR5P3i1NoVQpO5yW4STvk=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://joaopmatias.github.io/snake.ico">
 <link rel="apple-touch-icon" href="https://joaopmatias.github.io/snake-apple-touch.png">
 <link rel="alternate" type="application/rss+xml" href="https://joaopmatias.github.io/posts/index.xml">
@@ -74,6 +74,20 @@
 
     </style>
 </noscript>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
 
 </head>
 
@@ -215,6 +229,27 @@ function toggleThemeListener() {
 
 
 
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Logs: Finding Structure in the Chaos
+    </h2>
+  </header>
+  <section class="entry-content">
+    
+      <p>Did you ever get overwhelmed trying to understand all different log message of an application? In this post I’d like to share how to analyze application logs combining different open source projects to produce an appealing dashboard summarizing all information.
+We will use a github repository with a collection of algorithms to parse logs, logparser, plotly to create interactive plots, and pandas to transform data.
+For starters, we will by briefly explain the dependencies and datasets used, and later we show how to obtain a dashboard like the following....</p>
+    
+  </section>
+  <footer class="entry-footer"><span class="meta-item">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
+  <span>July 18, 2023</span></span><span class="meta-item">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 15"></polyline></svg>
+  <span>6 min</span></span>
+</footer>
+  <a class="entry-link" aria-label="post link to Logs: Finding Structure in the Chaos" href="https://joaopmatias.github.io/posts/2023-07-18-log-parsing/"></a>
+</article>
 
 <article class="post-entry"> 
   <header class="entry-header">
@@ -394,27 +429,11 @@ However, a while back and after some specific changes in the Python code, we sta
 </footer>
   <a class="entry-link" aria-label="post link to Bend R functions to your will " href="https://joaopmatias.github.io/posts/2020-02-22-r-functions-you-need/"></a>
 </article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>First post
-    </h2>
-  </header>
-  <section class="entry-content">
-    
-      <p>Cheers I will start using this website to share some ideas that I’m interested in.
-Initially, I’ll be focusing on the tools that I’ve been using to perform data analysis and program, in general.
-I look forward to your comments.</p>
-    
-  </section>
-  <footer class="entry-footer"><span class="meta-item">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
-  <span>January 30, 2020</span></span><span class="meta-item">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 15"></polyline></svg>
-  <span>1 min</span></span>
+<footer class="page-footer">
+  <nav class="pagination">
+    <a class="next" href="https://joaopmatias.github.io/posts/page/2/">Next Page »</a>
+  </nav>
 </footer>
-  <a class="entry-link" aria-label="post link to First post" href="https://joaopmatias.github.io/posts/2020-01-30-first-post/"></a>
-</article>
     </main>
     
 <footer class="footer">
